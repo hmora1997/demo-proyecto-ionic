@@ -8,22 +8,19 @@ import Login from "./components/Login/Login";
 import EppInsumos from "./components/EppInsumos";
 import CustomModal from "./components/CustomModal";
 
-/* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 
-/* Basic CSS for apps built with Ionic */
 import "@ionic/react/css/normalize.css";
 import "@ionic/react/css/structure.css";
 import "@ionic/react/css/typography.css";
 
-/* Optional CSS utils that can be commented out */
 import "@ionic/react/css/padding.css";
 import "@ionic/react/css/float-elements.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
-import "bootstrap/dist/css/bootstrap.min.css"; // Asegúrate de importar el CSS de Bootstrap
+import "bootstrap/dist/css/bootstrap.min.css";
 
 /* Theme variables */
 import "./theme/variables.css";
@@ -45,21 +42,18 @@ const App: React.FC = () => {
       }
     };
 
-    // Verificar la conexión a internet cada 5 segundos
     const intervalId = setInterval(checkInternetConnection, 5000);
 
-    // Realizar una verificación inicial al cargar la app
     checkInternetConnection();
 
     // Añadir event listeners para cambios de conexión
-    window.addEventListener('online', checkInternetConnection);
-    window.addEventListener('offline', checkInternetConnection);
+    window.addEventListener("online", checkInternetConnection);
+    window.addEventListener("offline", checkInternetConnection);
 
-    // Limpiar el intervalo y los event listeners cuando el componente se desmonte
     return () => {
       clearInterval(intervalId);
-      window.removeEventListener('online', checkInternetConnection);
-      window.removeEventListener('offline', checkInternetConnection);
+      window.removeEventListener("online", checkInternetConnection);
+      window.removeEventListener("offline", checkInternetConnection);
     };
   }, []);
 
@@ -79,7 +73,6 @@ const App: React.FC = () => {
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
-          {/* Definición de otras rutas... */}
         </IonRouterOutlet>
       </IonReactRouter>
 

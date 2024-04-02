@@ -1,7 +1,6 @@
-/* Ajustar la opacidad del backdrop del modal */
 .modal-backdrop {
     --backdrop-opacity: 1 !important;
-    /* Ajusta la opacidad según necesites */
+
 }
 
 .custom-modal {
@@ -11,20 +10,22 @@
     justify-content: center;
     align-items: center;
     --backdrop-opacity: 1;
-    /* Opacidad del fondo oscurecido */
+
 }
 
-/* Para centrar el contenido dentro del modal */
+
 .custom-modal .modal-wrapper {
     position: relative;
     top: 50%;
     transform: translateY(0%);
 }
+
 .card-color {
-    --ion-background-color: #f2f2f2; /* Establece el color de fondo de IonContent */
-  }
-  
-  .button-blue-modal {
+    --ion-background-color: #f2f2f2;
+
+}
+
+.button-blue-modal {
     --background: #2844d4;
     --border-radius: 0;
     --color: white;
@@ -32,9 +33,9 @@
     --padding-bottom: 1rem;
     --border-style: none;
     --margin: 0
-  }
+}
 
-  .button-gris-modal {
+.button-gris-modal {
     --background: #a8a4a4;
     --border-radius: 0;
     --color: white;
@@ -42,37 +43,29 @@
     --padding-bottom: 1rem;
     --border-style: none;
     --margin: 0
-  }
+}
 
-  .button-custom-padding {
-    --padding-start: 3rem; 
-    --padding-end: 3rem; 
-    --padding-top: .75rem; 
-    --padding-bottom: .75rem; 
-  }
-
-
-
+.button-custom-padding {
+    --padding-start: 3rem;
+    --padding-end: 3rem;
+    --padding-top: .75rem;
+    --padding-bottom: .75rem;
+}
 
 
 @media (max-width: 768px) {
 
-    /* Dispositivos móviles */
     .custom-modal {
         --width: 70%;
-        /* Ancho del modal para móviles */
         --height: 45%;
-        /* Altura automática */
     }
 }
 
 @media (min-width: 769px) {
 
-    /* Tabletas y escritorios */
     .custom-modal {
         --width: 40%;
-        /* Ancho del modal para dispositivos más grandes */
         --height: 40%;
-        /* Alto del modal */
+
     }
 }
