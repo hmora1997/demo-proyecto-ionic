@@ -1,24 +1,19 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import './Home.css';
+import React, { useState } from 'react';
+import { IonContent, IonPage } from "@ionic/react";
+import "./Home.css";
+import MenuUser from "../components/MenuUser";
+import Header from "../components/Header"
 
 const Home: React.FC = () => {
+  const [username] = useState('admin@admin.cl'); // Aquí definimos el nombre de usuario estáticamente
+
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Blank</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer />
-      </IonContent>
-    </IonPage>
+    <Header />
+    <IonContent fullscreen>
+      <MenuUser />
+    </IonContent>
+  </IonPage>
   );
 };
 

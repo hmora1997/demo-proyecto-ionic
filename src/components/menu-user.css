@@ -1,0 +1,10 @@
+.color-usuario{
+    background-color: #9BC050;
+}
+
+/* user-panel.css */
+.page-color {
+    --padding : 0;
+    --background: #F3F3F3; /* Establece el color de fondo para el contenido de la página */
+  }
+  

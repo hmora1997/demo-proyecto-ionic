@@ -1,0 +1,20 @@
+/* En global.css o tu archivo de estilos globales */
+ion-select::part(text) {
+    text-align: center;
+  }
+  
+  ion-select::part(placeholder) {
+    text-align: center;
+  }
+  
+
+  /* styles.css */
+.table-custom {
+    border-color: #2844d4 !important; /* Aplica color azul a los bordes de la tabla */
+  }
+  
+  .th-custom {
+    background-color: #2844d4 !important; /* Fondo azul para los encabezados */
+    color: white !important; /* Texto blanco para los encabezados */
+  }
+  

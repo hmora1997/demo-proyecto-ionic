@@ -1,0 +1,102 @@
+
+/* global.css o similar */
+.input-item {
+    --background: white;
+    /* Fondo blanco para el ítem */
+    --color: black;
+    /* Texto negro */
+    --placeholder-color: grey;
+    /* Color del placeholder */
+    --placeholder-opacity: 1;
+    /* Opacidad del placeholder */
+
+}
+
+.input-label {
+    --color: black;
+    /* Texto negro */
+}
+
+/* global.css */
+ion-item {
+    --inner-border-width: 0 !important;
+    --padding-start: 8px;
+    /* Sin padding al inicio */
+    --padding-end: 8px;
+    /* Sin padding al final */
+    --inner-padding-top: 0;
+    --inner-padding-bottom: 0;
+    --inner-padding-start: 0;
+    --inner-padding-end: 0;
+    --border-color: #A6A6A6;
+    --border-style: solid;
+    --border-width: 1.5px;
+
+}
+
+/* global.css o similar */
+.button-red {
+    --background: #ff3b30; /* Rojo */
+    --border-radius: 0;
+    --color: white;
+    --padding-top: 1rem;
+    --padding-bottom: 1rem;
+    --border-style: none;
+    --margin: 0
+  }
+  
+  .button-blue {
+    --background: #2844d4;
+    --border-radius: 0;
+    --color: white;
+    --padding-top: 1rem;
+    --padding-bottom: 1rem;
+    --border-style: none;
+    --margin: 0
+  }
+
+  .button-gris {
+    --background: #a8a4a4;
+    --border-radius: 0;
+    --color: white;
+    --padding-top: 1rem;
+    --padding-bottom: 1rem;
+    --border-style: none;
+    --margin: 0
+  }
+  
+  
+/* En tu archivo CSS global */
+.button-native-padding {
+  padding: 16px 32px !important; /* Ajusta el padding como desees */
+}
+
+  
+/* Login.css */
+.login-background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url("../public/fondo.png");
+    background-repeat: no-repeat;
+    background-size: cover; /* Se mantendrá en cover para dispositivos móviles */
+    background-position: center center;
+  }
+  
+
+  
+
+  .card-color{
+    background-color: #F3F3F3 !important;
+  }
+  .page-color{
+    background-color: red;
+  }
+
+  .logo-header {
+    width: 60px; /* Ajusta el ancho según sea necesario */
+    height: auto; /* Mantener la proporción de la imagen */
+
+  }
+  

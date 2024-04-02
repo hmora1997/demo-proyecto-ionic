@@ -1,7 +1,11 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import './index.css'; // Asegúrate de que el camino sea correcto
 import Home from './pages/Home';
+import Login from './components/Login/Login'; 
+import EppInsumos from "./components/EppInsumos"
+
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -18,9 +22,12 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Asegúrate de importar el CSS de Bootstrap
+
 
 /* Theme variables */
 import './theme/variables.css';
+import Insumos from './pages/Insumos';
 
 setupIonicReact();
 
@@ -31,8 +38,14 @@ const App: React.FC = () => (
         <Route exact path="/home">
           <Home />
         </Route>
+        <Route exact path="/login"> // Ruta para el componente Login
+          <Login />
+        </Route>
         <Route exact path="/">
-          <Redirect to="/home" />
+          <Redirect to="/home" /> 
+        </Route>
+        <Route exact path="/entrega-epp-insumos">
+        <Insumos />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>
