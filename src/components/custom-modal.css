@@ -5,7 +5,7 @@
 
 .custom-modal {
     --width: 45%;
-    --height: 45%;
+    --height: 25%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -57,7 +57,7 @@
 
     .custom-modal {
         --width: 70%;
-        --height: 45%;
+        --height: 35%;
     }
 }
 

@@ -7,6 +7,7 @@ import {
   IonItem,
   IonLabel,
 } from "@ionic/react";
+import Logo from "../Logo";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -29,15 +30,10 @@ const Login = () => {
           >
             <div className="card w-100 rounded-0" style={{ maxWidth: "400px" }}>
               <div className="card-header  border-0 bg-light py-3 card-header-color text-center">
-                <img
-                  src="../public/logo-cbs.png"
-                  alt="Logo"
-                  className="img-fluid"
-                  style={{ maxWidth: "80px" }} // Ajusta esto según tus necesidades
-                />
+              <Logo />
               </div>
               <div className="card-body px-5 pb-5 card-color">
-                <h5 class="fw-bold text-center mt-3 fs-6 fs-md-5">
+                <h5 className="fw-bold text-center mt-3 fs-6 fs-md-5">
                   Gestión de Insumos - CBS
                 </h5>
 
@@ -71,15 +67,15 @@ const Login = () => {
                       className=""
                     />
                   </IonItem>
-                  <IonButton
-                    routerLink="/home"
-                    className={`mx-0 fw-bold custom-button ${
-                      buttonColor === "red" ? "button-red" : "button-blue"
+                  <a
+                    href="/home"
+                    className={`btn w-100 text-white px-0 mx-0 fw-bold custom-button ${
+                    buttonColor === "red" ? "button-red" : "button-blue"
                     }`}
                     expand="block"
                   >
                     Ingresar
-                  </IonButton>
+                  </a>
                 </form>
               </div>
             </div>

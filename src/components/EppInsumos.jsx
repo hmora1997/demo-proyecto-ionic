@@ -12,6 +12,7 @@ import {
 } from "@ionic/react";
 import "./epp-insumos.css";
 import CustomModal from "./CustomModal";
+import Input from "./Input";
 
 const EppInsumos = () => {
   const [showModal, setShowModal] = useState(false);
@@ -19,7 +20,7 @@ const EppInsumos = () => {
 
   const closeModal = () => {
     if (modalStage === 2) {
-      setShowModal(false); 
+      setShowModal(false);
       setTimeout(() => {
         setModalStage(0);
       }, 300);
@@ -35,6 +36,10 @@ const EppInsumos = () => {
       setModalStage(2);
     }, 3000);
   };
+  const dataSelect = [
+    { id: 1, nombre: "valor 1" },
+    { id: 2, nombre: "valor 2" },
+  ];
 
   let title, message, buttons;
   switch (modalStage) {
@@ -69,7 +74,7 @@ const EppInsumos = () => {
   }
 
   return (
-    <IonPage>
+    <>
       <CustomModal
         isOpen={showModal}
         title={title}
@@ -78,8 +83,8 @@ const EppInsumos = () => {
         onClose={closeModal}
         isSubmitting={modalStage === 1}
       />
-      <IonContent className="ion-padding page-color">
-        <div className="color-usuario w-100 text-white text-start ps-5  mt-5 mb-3">
+      <IonContent className=" page-color">
+         <div className="color-usuario w-100 text-white text-start ps-5 mb-3"> {/*Hacer Componente */}
           <span className="fw-bold"> Usuario Actual:</span> admin@admin.cl
         </div>
         <div className="container-fluid px-5 mt-4">
@@ -111,17 +116,10 @@ const EppInsumos = () => {
               </div>
             </div>
           </div>
-          <IonLabel className="text-dark" position="stacked">
+
+          <Input type={"text"} placeholder={"Motivo de entrega"}>
             Motivo de entrega
-          </IonLabel>
-          <IonItem className="input-item mb-4">
-            <IonInput
-              type="text"
-              clearInput
-              placeholder="Motivo de entrega"
-              className=""
-            />
-          </IonItem>
+          </Input>
           <IonLabel className="text-dark" position="stacked">
             Bodega
           </IonLabel>
@@ -213,7 +211,7 @@ const EppInsumos = () => {
           </IonButton>
         </div>
       </IonContent>
-    </IonPage>
+    </>
   );
 };
 

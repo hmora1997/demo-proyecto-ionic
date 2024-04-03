@@ -4,7 +4,7 @@ import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
 import "./index.css"; // Asegúrate de que el camino sea correcto
 import Home from "./pages/Home";
-import Login from "./components/Login/Login";
+import Login from "./components/Login/Login.jsx";
 import EppInsumos from "./components/EppInsumos";
 import CustomModal from "./components/CustomModal";
 
@@ -71,7 +71,7 @@ const App: React.FC = () => {
             <Insumos />
           </Route>
           <Route exact path="/">
-            <Redirect to="/home" />
+            <Redirect to="/login" />
           </Route>
         </IonRouterOutlet>
       </IonReactRouter>
