@@ -6,7 +6,7 @@ const Logo = ({ children, redirect }) => {
       <img
         src={LogoFoto}
         alt={children}
-        className="ms-3 logo-header" // Asegúrate de que la clase logo-header esté definida en tu CSS
+        className=" logo-header" // Asegúrate de que la clase logo-header esté definida en tu CSS
       />
     </a>
   );

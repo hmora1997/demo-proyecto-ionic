@@ -4,7 +4,7 @@ import "./custom-modal.css"; // Asegura que este archivo contenga tus estilos pe
 
 const CustomModal = ({ isOpen, title, message, buttons, onClose, isSubmitting }) => {
   return (
-    <IonModal isOpen={isOpen} onDidDismiss={onClose} cssClass="custom-modal">
+    <IonModal isOpen={isOpen} onDidDismiss={onClose} cssClass="custom-modal" backdropDismiss={false}>
       {/* Encabezado del Modal */}
       <IonHeader>
         <IonToolbar>

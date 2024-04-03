@@ -69,7 +69,7 @@ const Login = () => {
                   </IonItem>
                   <a
                     href="/home"
-                    className={`btn w-100 text-white px-0 mx-0 fw-bold custom-button ${
+                    className={`btn w-100 text-white px-0 mx-0 py-2 fw-bold rounded-0 custom-button ${
                     buttonColor === "red" ? "button-red" : "button-blue"
                     }`}
                     expand="block"

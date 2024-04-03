@@ -54,18 +54,20 @@
 
 
 @media (max-width: 768px) {
-
     .custom-modal {
-        --width: 70%;
-        --height: 35%;
+        --width: auto;
+        --min-width: 300px; 
+        --height: 30%;
+        --max-height: 250px;
+
     }
 }
 
 @media (min-width: 769px) {
-
     .custom-modal {
         --width: 40%;
-        --height: 40%;
+        --height: 30%;
+        --max-height: 250px;
 
     }
 }

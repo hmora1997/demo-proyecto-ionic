@@ -5,7 +5,7 @@ import { Redirect, Route } from "react-router-dom";
 import "./index.css"; // Asegúrate de que el camino sea correcto
 import Home from "./pages/Home";
 import Login from "./components/Login/Login.jsx";
-import EppInsumos from "./components/EppInsumos";
+import Insumos from "./pages/Insumos";
 import CustomModal from "./components/CustomModal";
 
 import "@ionic/react/css/core.css";
@@ -24,7 +24,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 /* Theme variables */
 import "./theme/variables.css";
-import Insumos from "./pages/Insumos";
+
 
 setupIonicReact();
 
