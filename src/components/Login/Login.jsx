@@ -8,7 +8,6 @@ import {
   IonLabel,
 } from "@ionic/react";
 
-
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +24,7 @@ const Login = () => {
       <IonContent>
         <div className="login-background">
           <div
-            className="d-flex justify-content-center align-items-center"
+            className="d-flex justify-content-center align-items-center m-3"
             style={{ minHeight: "100%" }}
           >
             <div className="card w-100 rounded-0" style={{ maxWidth: "400px" }}>
@@ -38,7 +37,10 @@ const Login = () => {
                 />
               </div>
               <div className="card-body px-5 pb-5 card-color">
-                <h5 className="fw-bold mt-3" >Gestión de Insumos - CBS</h5>
+                <h5 class="fw-bold text-center mt-3 fs-6 fs-md-5">
+                  Gestión de Insumos - CBS
+                </h5>
+
                 <p className="text-dark text-center mb-4">
                   ¡Bienvenido de nuevo!
                 </p>
@@ -70,14 +72,14 @@ const Login = () => {
                     />
                   </IonItem>
                   <IonButton
-                  routerLink="/home"
-                  className={`mx-0 fw-bold custom-button ${
-                    buttonColor === "red" ? "button-red" : "button-blue"
-                  }`}
-                  expand="block"
-                >
-                  Ingresar
-                </IonButton>
+                    routerLink="/home"
+                    className={`mx-0 fw-bold custom-button ${
+                      buttonColor === "red" ? "button-red" : "button-blue"
+                    }`}
+                    expand="block"
+                  >
+                    Ingresar
+                  </IonButton>
                 </form>
               </div>
             </div>
