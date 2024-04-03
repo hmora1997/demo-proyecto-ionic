@@ -13,6 +13,7 @@ import {
 import "./epp-insumos.css";
 import CustomModal from "./CustomModal";
 import Input from "./Input";
+import UsuarioActual from './UsuarioActual'; 
 
 const EppInsumos = () => {
   const [showModal, setShowModal] = useState(false);
@@ -84,9 +85,7 @@ const EppInsumos = () => {
         isSubmitting={modalStage === 1}
       />
       <IonContent className=" page-color">
-         <div className="color-usuario w-100 text-white text-start ps-5 mb-3"> {/*Hacer Componente */}
-          <span className="fw-bold"> Usuario Actual:</span> admin@admin.cl
-        </div>
+      <UsuarioActual usuario="admin@admin.cl" />
         <div className="container-fluid px-5 mt-4">
           <h2 className=" mb-3">Entregar EPP o Insumos</h2>
           <IonLabel className="text-dark" position="stacked">
