@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { IonPopover, IonButton, IonIcon, IonList } from "@ionic/react";
-import { trash } from "ionicons/icons";
+import { IonActionSheet } from "@ionic/react";
+import { trash,close } from "ionicons/icons";
 
 const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
-  const [showPopover, setShowPopover] = useState({ open: false, event: null });
+  const [showActionSheet, setShowActionSheet] = useState(false);
   const [trabajadorSeleccionado, setTrabajadorSeleccionado] = useState(null);
 
   return (
@@ -24,9 +24,9 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
             seleccionados.map((trabajador) => (
               <tr
                 key={trabajador.TRA_ID}
-                onClick={(e) => {
-                  setShowPopover({ open: true, event: e.nativeEvent });
-                  setTrabajadorSeleccionado(trabajador.TRA_ID);
+                onClick={() => {
+                  setTrabajadorSeleccionado(trabajador);
+                  setShowActionSheet(true);
                 }}
               >
                 <td>{trabajador.TRA_RUT}</td>
@@ -35,28 +35,32 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
             ))
           ) : (
             <tr>
-              <td colSpan="3">No hay Trabajadores seleccionados.</td>
+              <td colSpan="2">No hay Trabajadores seleccionados.</td>
             </tr>
           )}
         </tbody>
       </table>
-      <IonPopover
-        isOpen={showPopover.open}
-        event={showPopover.event}
-        onDidDismiss={() => setShowPopover({ open: false, event: null })}
-      >
-        <IonList className="d-flex justify-content-center p-1">
-          <IonButton
-            className="w-50 m-0  mb-0 fw-bold button-red"
-            onClick={() => {
-              onEliminar(trabajadorSeleccionado);
-              setShowPopover({ open: false, event: null });
-            }}
-          >
-            Eliminar
-          </IonButton>
-        </IonList>
-      </IonPopover>
+
+      <IonActionSheet
+        isOpen={showActionSheet}
+        onDidDismiss={() => setShowActionSheet(false)}
+        header="Acciones"
+        buttons={[
+          {
+            text: "Eliminar",
+            role: "destructive",
+            icon: trash,
+            handler: () => {
+              onEliminar(trabajadorSeleccionado.TRA_ID);
+            },
+          },
+          {
+            text: "Cancelar",
+            role: "cancel",
+            icon: close,
+          },
+        ]}
+      />
     </div>
   );
 };

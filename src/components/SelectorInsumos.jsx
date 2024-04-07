@@ -31,8 +31,16 @@ const SelectorInsumos = ({ insumosSeleccionados, setInsumosSeleccionados }) => {
   }, []);
 
   useEffect(() => {
-    // Asegúrate de sincronizar el estado local con insumosSeleccionados si es necesario
-    // Esto depende de cómo estés manejando las selecciones y las cantidades en SelectorInsumos
+    
+    const seleccionadosActualizados = insumosSeleccionados.reduce(
+      (acc, insumo) => {
+        acc[insumo.EPP_ID] = { ...insumo };
+        return acc;
+      },
+      {}
+    );
+
+    setSeleccionados(seleccionadosActualizados);
   }, [insumosSeleccionados]);
 
   const toggleSeleccion = (insumoId) => {

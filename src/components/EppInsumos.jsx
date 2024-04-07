@@ -26,7 +26,9 @@ const EppInsumos = () => {
   const [cargos, setCargos] = useState([]);
   const [bodegas, setBodegas] = useState([]);
   const [seleccionados, setSeleccionados] = useState([]);
-
+  const [bodegaSeleccionada, setBodegaSeleccionada] = useState("");
+  const [cargoSeleccionado, setCargoSeleccionado] = useState("");
+  const [motivo, setMotivo] = useState("");
   const [insumosSeleccionados, setInsumosSeleccionados] = useState([]);
 
   useEffect(() => {
@@ -64,6 +66,14 @@ const EppInsumos = () => {
     // Aquí también deberías actualizar cualquier otro estado o almacenamiento que esté usando estos datos
   };
 
+  // En el componente padre
+  const onEliminarInsumo = (insumoId) => {
+    const nuevosInsumosSeleccionados = insumosSeleccionados.filter(
+      (insumo) => insumo.EPP_ID !== insumoId
+    );
+    setInsumosSeleccionados(nuevosInsumosSeleccionados);
+  };
+
   const onEditar = (insumoId, nuevaCantidad) => {
     const nuevosInsumosSeleccionados = insumosSeleccionados.map((insumo) =>
       insumo.EPP_ID === insumoId
@@ -75,15 +85,19 @@ const EppInsumos = () => {
   };
 
   const closeModal = () => {
+    setShowModal(false);
+
     if (modalStage === 2) {
-      setShowModal(false);
-      setTimeout(() => {
-        setModalStage(0);
-      }, 300);
-    } else {
-      setShowModal(false);
-      setModalStage(0);
+      setSeleccionados([]);
+      setInsumosSeleccionados([]);
+      setBodegaSeleccionada("");
+      setCargoSeleccionado("");
+      setMotivo("");
     }
+
+    setTimeout(() => {
+      setModalStage(0);
+    }, 300);
   };
 
   const handleAccept = () => {
@@ -92,10 +106,6 @@ const EppInsumos = () => {
       setModalStage(2);
     }, 3000);
   };
-  const dataSelect = [
-    { id: 1, nombre: "valor 1" },
-    { id: 2, nombre: "valor 2" },
-  ];
 
   let title, message, buttons;
   switch (modalStage) {
@@ -148,6 +158,8 @@ const EppInsumos = () => {
           </IonLabel>
           <IonItem className="input-item mb-2">
             <IonSelect
+              value={cargoSeleccionado}
+              onIonChange={(e) => setCargoSeleccionado(e.detail.value)}
               className="text-center"
               placeholder="[Seleccionar Cargo]"
             >
@@ -169,20 +181,33 @@ const EppInsumos = () => {
               <div className="col-6 px-0 ps-1 ps-md-2">
                 <SelectorInsumos
                   insumosSeleccionados={insumosSeleccionados}
-                  setInsumosSeleccionados={setInsumosSeleccionados}
+                  setInsumosSeleccionados={setInsumosSeleccionados} // Pasas el setter para que SelectorInsumos pueda actualizar el estado global
                 />
               </div>
             </div>
           </div>
 
-          <Input type={"text"} placeholder={"Motivo de entrega"}>
-            Motivo de entrega
-          </Input>
+          <IonItem className="input-item mb-4">
+            <IonInput
+              type="text"
+              value={motivo}
+              clearInput
+              placeholder="Motivo de entrega"
+              onChange={(e) => setMotivo(e.detail.value)}
+              className=""
+            />
+          </IonItem>
+
           <IonLabel className="text-dark" position="stacked">
             Bodega
           </IonLabel>
           <IonItem className="input-item mb-4">
-            <IonSelect className="text-center" placeholder="[Bodega]">
+            <IonSelect
+              className="text-center"
+              value={bodegaSeleccionada}
+              onIonChange={(e) => setBodegaSeleccionada(e.detail.value)}
+              placeholder="[Seleccionar Bodega]"
+            >
               {bodegas.map((bodega) => (
                 <IonSelectOption key={bodega.BOD_ID} value={bodega.BOD_ID}>
                   {bodega.BOD_NOMBRE}
@@ -202,7 +227,7 @@ const EppInsumos = () => {
           </IonLabel>
           <InsumosSeleccionados
             seleccionados={insumosSeleccionados}
-            onEliminar={onEliminar} // Asumiendo que también tienes esta función
+            onEliminar={onEliminarInsumo} // Asumiendo que también tienes esta función
             onEditar={onEditar}
           />
 
