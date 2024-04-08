@@ -6,6 +6,8 @@ import {
   IonItem,
   IonLabel,
   IonCheckbox,
+  IonFooter,
+  IonContent
 } from "@ionic/react";
 import { obtenerTrabajadores } from "../services/trabajadores";
 
@@ -47,6 +49,7 @@ const SelectorTrabajadores = ({ seleccionados, setSeleccionados }) => {
       </IonButton>
 
       <IonModal isOpen={mostrarModal} onDidDismiss={() => setMostrarModal(false)}>
+        <IonContent>
         <IonList className="p-1">
           {trabajadores.map(trabajador => (
             <IonItem key={trabajador.TRA_ID}>
@@ -61,9 +64,16 @@ const SelectorTrabajadores = ({ seleccionados, setSeleccionados }) => {
             </IonItem>
           ))}
         </IonList>
-        <IonButton onClick={confirmarSeleccion} className="w-100 mx-0 mb-0 fw-bold button-blue">
-          Confirmar Selección
-        </IonButton>
+        </IonContent>
+        <IonFooter>
+          <IonButton
+            expand="block"
+            onClick={confirmarSeleccion}
+            className="w-100 mx-0 mb-0 fw-bold button-blue"
+          >
+            Confirmar Selección
+          </IonButton>
+        </IonFooter>
       </IonModal>
     </>
   );
