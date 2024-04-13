@@ -1,15 +1,16 @@
-import config from "../config";
+import axios from 'axios';
+import config from '../config';
 
 const obtenerCargos = async () => {
   try {
-    const respuesta = await fetch(`${config.BASE_URL}cargo/get`);
 
-    const cargos = await respuesta.json();
+    const respuesta = await axios.get(`${config.BASE_URL}cargo/get`);
+    const cargos = respuesta.data;
     console.log("CARGOS", cargos);
     return cargos;
   } catch (error) {
     console.error("Error al obtener los cargos:", error);
-    throw error; 
+    throw error;
   }
 };
 
