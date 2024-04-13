@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import {
   IonButton,
   IonModal,
-  IonList,
-  IonItem,
-  IonLabel,
-  IonCheckbox,
   IonFooter,
-  IonContent
+  IonHeader,
+  IonIcon,
+  IonContent,
 } from "@ionic/react";
 import { obtenerTrabajadores } from "../services/trabajadores";
+import { close } from "ionicons/icons";
 
 const SelectorTrabajadores = ({ seleccionados, setSeleccionados }) => {
   const [mostrarModal, setMostrarModal] = useState(false);
@@ -29,47 +28,76 @@ const SelectorTrabajadores = ({ seleccionados, setSeleccionados }) => {
   }, []);
 
   const toggleSeleccion = (trabajador) => {
-    const estaSeleccionado = seleccionados.some(selec => selec.TRA_ID === trabajador.TRA_ID);
+    const estaSeleccionado = seleccionados.some(
+      (selec) => selec.TRA_ID === trabajador.TRA_ID
+    );
     if (estaSeleccionado) {
-      setSeleccionados(seleccionados.filter(selec => selec.TRA_ID !== trabajador.TRA_ID));
+      setSeleccionados(
+        seleccionados.filter((selec) => selec.TRA_ID !== trabajador.TRA_ID)
+      );
     } else {
       setSeleccionados([...seleccionados, trabajador]);
     }
   };
 
-  const confirmarSeleccion = () => {
-    // Cierra el modal, no es necesario actualizar el estado aquí ya que se hace en toggleSeleccion
-    setMostrarModal(false);
-  };
-
   return (
     <>
-      <IonButton className="w-100 mx-0 mb-4 fw-bold button-blue" onClick={() => setMostrarModal(true)}>
-        Trabajadores
-      </IonButton>
+      <IonButton   className="w-100 mx-0 mb-4 fw-bold button-blue"  onClick={() => setMostrarModal(true)}>Trabajadores</IonButton>
 
-      <IonModal isOpen={mostrarModal} onDidDismiss={() => setMostrarModal(false)}>
+      <IonModal
+        isOpen={mostrarModal}
+        onDidDismiss={() => setMostrarModal(false)}
+      >
+        <IonHeader className="d-flex justify-content-end align-items-center">
+          {/* <div className="container-fluid">
+          <h6 className="fw-bold my-0">Selector de Trabajadores</h6>
+          </div> */}
+
+          <IonButton
+            className="fw-bold button-blue"
+            fill="clear"
+            onClick={() => setMostrarModal(false)}
+          >
+            <IonIcon icon={close} />
+          </IonButton>
+        </IonHeader>
         <IonContent>
-        <IonList className="p-1">
-          {trabajadores.map(trabajador => (
-            <IonItem key={trabajador.TRA_ID}>
-              <IonLabel>
-                {trabajador.TRA_RUT} - {trabajador.TRA_NOMBRES} {trabajador.TRA_APELLIDOS} - {trabajador.TRA_CARGO || "Cargo no especificado"}
-              </IonLabel>
-              <IonCheckbox
-                slot="start"
-                checked={seleccionados.some(selec => selec.TRA_ID === trabajador.TRA_ID)}
-                onIonChange={() => toggleSeleccion(trabajador)}
-              />
-            </IonItem>
-          ))}
-        </IonList>
+          <div className="list-group">
+            {trabajadores.map((trabajador, index) => (
+              <label
+                key={index}
+                className="list-group-item d-flex position-relative align-items-center"
+                style={{ cursor: "pointer" }}
+              >
+                <input
+                  className="form-check-input me-1"
+                  type="checkbox"
+                  value=""
+                  checked={seleccionados.some(
+                    (selec) => selec.TRA_ID === trabajador.TRA_ID
+                  )}
+                  onChange={() => {}}
+                  onClick={(e) => e.stopPropagation()}
+                />
+                <div
+                  onClick={() => toggleSeleccion(trabajador)}
+                  className="ms-3 w-100"
+                >
+                  <strong>
+                    {trabajador.TRA_NOMBRES} {trabajador.TRA_APELLIDOS}
+                  </strong>
+                  <div>{trabajador.TRA_RUT_COMPLETO}</div>
+                  <div>{trabajador.TRA_CARGO || "Cargo no especificado"}</div>
+                </div>
+              </label>
+            ))}
+          </div>
         </IonContent>
         <IonFooter>
           <IonButton
             expand="block"
-            onClick={confirmarSeleccion}
-            className="w-100 mx-0 mb-0 fw-bold button-blue"
+            className="mx-0 mb-0 fw-bold button-blue"
+            onClick={() => setMostrarModal(false)}
           >
             Confirmar Selección
           </IonButton>
