@@ -217,6 +217,7 @@ const EppInsumos = () => {
           </IonItem>
           <IonLabel className="text-dark" position="stacked">
             Resumen Trabajadores
+            <p className="fw-bold text-dark">Presione un trabajador para eliminar</p>
           </IonLabel>
           <TrabajadoresSeleccionados
             seleccionados={seleccionados}
@@ -224,6 +225,7 @@ const EppInsumos = () => {
           />
           <IonLabel className="text-dark" position="stacked">
             Resumen EPP e Insumos
+            <p className="fw-bold text-dark">Presione un insumo para editar/eliminar</p>
           </IonLabel>
           <InsumosSeleccionados
             seleccionados={insumosSeleccionados}
