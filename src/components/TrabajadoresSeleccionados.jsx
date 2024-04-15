@@ -29,7 +29,7 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
                   setShowActionSheet(true);
                 }}
               >
-                <td>{trabajador.TRA_RUT}</td>
+                <td>{trabajador.TRA_RUT_COMPLETO}</td>
                 <td>{`${trabajador.TRA_NOMBRES} ${trabajador.TRA_APELLIDOS}`}</td>
               </tr>
             ))

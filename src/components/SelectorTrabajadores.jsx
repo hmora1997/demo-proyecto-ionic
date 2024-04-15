@@ -13,6 +13,7 @@ import { close } from "ionicons/icons";
 const SelectorTrabajadores = ({ seleccionados, setSeleccionados }) => {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [trabajadores, setTrabajadores] = useState([]);
+  const [temporalSeleccionados, setTemporalSeleccionados] = useState([]);
 
   useEffect(() => {
     const cargarTrabajadores = async () => {
@@ -27,34 +28,38 @@ const SelectorTrabajadores = ({ seleccionados, setSeleccionados }) => {
     cargarTrabajadores();
   }, []);
 
+  useEffect(() => {
+    setTemporalSeleccionados(seleccionados);
+  }, [mostrarModal]);
+
   const toggleSeleccion = (trabajador) => {
-    const estaSeleccionado = seleccionados.some(
+    const estaSeleccionado = temporalSeleccionados.some(
       (selec) => selec.TRA_ID === trabajador.TRA_ID
     );
     if (estaSeleccionado) {
-      setSeleccionados(
-        seleccionados.filter((selec) => selec.TRA_ID !== trabajador.TRA_ID)
+      setTemporalSeleccionados(
+        temporalSeleccionados.filter((selec) => selec.TRA_ID !== trabajador.TRA_ID)
       );
     } else {
-      setSeleccionados([...seleccionados, trabajador]);
+      setTemporalSeleccionados([...temporalSeleccionados, trabajador]);
     }
+  };
+
+  const confirmarSeleccion = () => {
+    setSeleccionados(temporalSeleccionados);
+    setMostrarModal(false);
   };
 
   return (
     <>
-      <IonButton   className="w-100 mx-0 mb-4 fw-bold button-blue"  onClick={() => setMostrarModal(true)}>Trabajadores</IonButton>
+      <IonButton onClick={() => setMostrarModal(true)} className="w-100 mx-0 mb-4 fw-bold button-blue">Trabajadores</IonButton>
 
       <IonModal
         isOpen={mostrarModal}
         onDidDismiss={() => setMostrarModal(false)}
       >
         <IonHeader className="d-flex justify-content-end align-items-center">
-          {/* <div className="container-fluid">
-          <h6 className="fw-bold my-0">Selector de Trabajadores</h6>
-          </div> */}
-
           <IonButton
-            className="fw-bold button-blue"
             fill="clear"
             onClick={() => setMostrarModal(false)}
           >
@@ -73,16 +78,12 @@ const SelectorTrabajadores = ({ seleccionados, setSeleccionados }) => {
                   className="form-check-input me-1"
                   type="checkbox"
                   value=""
-                  checked={seleccionados.some(
+                  checked={temporalSeleccionados.some(
                     (selec) => selec.TRA_ID === trabajador.TRA_ID
                   )}
-                  onChange={() => {}}
-                  onClick={(e) => e.stopPropagation()}
+                  onChange={() => toggleSeleccion(trabajador)}
                 />
-                <div
-                  onClick={() => toggleSeleccion(trabajador)}
-                  className="ms-3 w-100"
-                >
+                <div className="ms-3 w-100">
                   <strong>
                     {trabajador.TRA_NOMBRES} {trabajador.TRA_APELLIDOS}
                   </strong>
@@ -96,8 +97,8 @@ const SelectorTrabajadores = ({ seleccionados, setSeleccionados }) => {
         <IonFooter>
           <IonButton
             expand="block"
+            onClick={confirmarSeleccion}
             className="mx-0 mb-0 fw-bold button-blue"
-            onClick={() => setMostrarModal(false)}
           >
             Confirmar Selección
           </IonButton>
