@@ -3,9 +3,7 @@ import config from '../config';
 
 const obtenerTrabajadores = async () => {
   try {
-    // Realizamos la petición GET utilizando Axios
     const respuesta = await axios.get(`${config.BASE_URL}trabajador/get`);
-    // Accedemos a los datos directamente
     const trabajadores = respuesta.data;
     return trabajadores;
   } catch (error) {
@@ -14,4 +12,23 @@ const obtenerTrabajadores = async () => {
   }
 };
 
-export { obtenerTrabajadores };
+const obtenerTrabajadoresPorCarId = async (carId) => {
+  try {
+    const url = `${config.BASE_URL}trabajador/get?TRA_CAR_ID=${carId}`;
+    const response = await axios.get(url);
+    console.log("Respuesta obtenida:", response.data); // Depuración: ver la respuesta real de la API
+    if (response.data && Array.isArray(response.data)) {
+      return response.data;
+    } else {
+      console.warn('Respuesta inesperada o no es un array:', response.data);
+      return []; 
+    }
+  } catch (error) {
+    console.error("Error al obtener los trabajadores por CAR_ID:", error);
+    return []; 
+  }
+};
+
+
+
+export { obtenerTrabajadores, obtenerTrabajadoresPorCarId };

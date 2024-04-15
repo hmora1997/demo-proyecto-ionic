@@ -18,6 +18,7 @@ import {
 import "./epp-insumos.css";
 import CustomModal from "./CustomModal";
 import UsuarioActual from "./UsuarioActual";
+import { obtenerTrabajadoresPorCarId } from "../services/trabajadores";
 
 const EppInsumos = () => {
   const [cargos, setCargos] = useState([]);
@@ -29,6 +30,8 @@ const EppInsumos = () => {
   const [modalStage, setModalStage] = useState(0);
   const [motivo, setMotivo] = useState("");
   const [bodegaSeleccionada, setBodegaSeleccionada] = useState("");
+  
+  
 
   useEffect(() => {
     const cargarCargos = async () => {

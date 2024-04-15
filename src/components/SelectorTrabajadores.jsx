@@ -89,7 +89,7 @@ const SelectorTrabajadores = ({ seleccionados, setSeleccionados }) => {
                     {trabajador.TRA_NOMBRES} {trabajador.TRA_APELLIDOS}
                   </strong>
                   <div>{trabajador.TRA_RUT_COMPLETO}</div>
-                  <div>{trabajador.TRA_CARGO || "Cargo no especificado"}</div>
+                  <div>{trabajador.CAR_NOMBRE || "Cargo no especificado"}</div>
                 </div>
               </label>
             ))}
