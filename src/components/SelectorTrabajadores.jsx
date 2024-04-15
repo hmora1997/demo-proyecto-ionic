@@ -59,7 +59,8 @@ const SelectorTrabajadores = ({ seleccionados, setSeleccionados }) => {
         onDidDismiss={() => setMostrarModal(false)}
       >
         <IonHeader className="d-flex justify-content-end align-items-center">
-          <IonButton
+        <IonButton
+            className="fw-bold button-blue"
             fill="clear"
             onClick={() => setMostrarModal(false)}
           >
