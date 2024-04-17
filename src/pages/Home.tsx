@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IonContent, IonPage } from "@ionic/react";
 import "./Home.css";
-import MenuUser from "../components/MenuUser";
+import MenuHome from "../components/MenuHome";
 import Header from "../components/Header"
 
 const Home: React.FC = () => {
@@ -11,7 +11,7 @@ const Home: React.FC = () => {
     <IonPage>
     <Header />
     <IonContent fullscreen>
-      <MenuUser />
+      <MenuHome />
     </IonContent>
   </IonPage>
   );

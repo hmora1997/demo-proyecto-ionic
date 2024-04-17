@@ -24,6 +24,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+import Consulta from "./pages/Consulta";
 
 
 setupIonicReact();
@@ -66,6 +67,9 @@ const App: React.FC = () => {
           </Route>
           <Route exact path="/login">
             <Login />
+          </Route>
+          <Route exact path="/consulta">
+            <Consulta />
           </Route>
           <Route exact path="/entrega-epp-insumos">
             <Insumos />

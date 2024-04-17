@@ -2,9 +2,9 @@ import React from "react";
 import { IonContent, IonPage, IonButton } from "@ionic/react";
 import BotonNavegacion from "./BotonNavegacion";
 import UsuarioActual from './UsuarioActual'; 
-import "./menu-user.css";
+import "./menu-home.css";
 
-const UserMenu = () => {
+const MenuHome = () => {
   return (
     <IonContent className=" page-color">
       <UsuarioActual usuario="admin@admin.cl" />
@@ -16,11 +16,11 @@ const UserMenu = () => {
           texto="Entregar EPPs o Insumos"
           href="/entrega-epp-insumos"
         />
-        <BotonNavegacion texto="Consulta en Línea" />
+        <BotonNavegacion texto="Consulta en Línea"  href="/consulta" />
         <BotonNavegacion texto="Cerrar Sesión" href="/login" />
       </div>
     </IonContent>
   );
 };
 
-export default UserMenu;
+export default MenuHome;
