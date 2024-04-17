@@ -18,8 +18,10 @@ import {
 import "./epp-insumos.css";
 import CustomModal from "./CustomModal";
 import UsuarioActual from "./UsuarioActual";
-import { obtenerTrabajadoresPorCarId } from "../services/trabajadores";
+import { getDeviceInfo } from "../utils/androidId";
 
+import { getCurrentLocation } from "../utils/geolocalizacion";
+import { enviarSolicitudes } from "../services/insert";
 const EppInsumos = () => {
   const [cargos, setCargos] = useState([]);
   const [bodegas, setBodegas] = useState([]);
@@ -59,7 +61,6 @@ const EppInsumos = () => {
       (trabajador) => trabajador.TRA_ID !== trabajadorId
     );
     setSeleccionados(nuevosSeleccionados);
-    // Aquí también deberías actualizar cualquier otro estado o almacenamiento que esté usando estos datos
   };
 
   // En el componente padre
@@ -96,21 +97,47 @@ const EppInsumos = () => {
     }, 300);
   };
 
-  const handleAccept = () => {
+
+  const handleAccept = async () => {
     console.log({
-      Cargo: cargos.find((cargo) => cargo.CAR_ID === cargoSeleccionado)
-        ?.CAR_NOMBRE,
+      Cargo: cargos.find((cargo) => cargo.CAR_ID === cargoSeleccionado)?.CAR_NOMBRE,
       TrabajadoresSeleccionados: seleccionados,
       InsumosSeleccionados: insumosSeleccionados,
       Motivo: motivo,
-      Bodega: bodegas.find((bodega) => bodega.BOD_ID === bodegaSeleccionada)
-        ?.BOD_NOMBRE,
+      Bodega: bodegas.find((bodega) => bodega.BOD_ID === bodegaSeleccionada)?.BOD_NOMBRE,
     });
+  
+    let location, uuid;
+  
+
+    try {
+      location = await getCurrentLocation();
+      console.log('Ubicación actual:', location);
+    } catch (error) {
+      console.error('Error al obtener la ubicación:', error);
+      location = { coords: { latitude: "", longitude: "" }}; 
+    }
+  
+    // Intenta obtener el UUID del dispositivo Android
+    try {
+      const deviceInfo = await getDeviceInfo();
+      uuid = deviceInfo.uuid || "";
+      console.log('Android UUID:', uuid);
+    } catch (error) {
+      console.error('Error al obtener el Android UUID:', error);
+      uuid = ''; // Usar valor en blanco si falla
+    }
+  
+    // Enviar los datos, incluso si algunos son cadenas vacías
+    enviarSolicitudes(seleccionados, insumosSeleccionados, motivo, bodegaSeleccionada, 1, uuid, location);
+  
+    // Procesar cambios de UI después del envío
     setModalStage(1);
     setTimeout(() => {
       setModalStage(2);
     }, 3000);
   };
+  
 
   let title, message, buttons;
   switch (modalStage) {
@@ -255,18 +282,15 @@ const EppInsumos = () => {
               />
             </>
           )}
-          <IonButton
-            expand="block"
-            onClick={() => setShowModal(true)}
-            disabled={
-              !bodegaSeleccionada ||
-              seleccionados.length === 0 ||
-              insumosSeleccionados.length === 0
-            }
-            className="mx-0 mt-4 mb-3 fw-bold button-blue"
-          >
-            Validar y entregar
-          </IonButton>
+        <IonButton
+  expand="block"
+  onClick={handleAccept} // Asegúrate de que está llamando a handleAccept
+  disabled={!bodegaSeleccionada || seleccionados.length === 0 || insumosSeleccionados.length === 0}
+  className="mx-0 mt-4 mb-3 fw-bold button-blue"
+>
+  Validar y entregar
+</IonButton>
+
         </div>
       </IonContent>
     </>
