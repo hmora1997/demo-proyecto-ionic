@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+// SelectorTrabajadores.js
+import React, { useState, useEffect } from 'react';
 import {
   IonButton,
   IonModal,
@@ -6,27 +7,29 @@ import {
   IonHeader,
   IonIcon,
   IonContent,
-} from "@ionic/react";
-import { obtenerTrabajadores } from "../services/trabajadores";
-import { close } from "ionicons/icons";
+} from '@ionic/react';
+import { obtenerTrabajadoresPorCarId } from '../services/trabajadores'; // Asegúrate de tener esta importación
+import { close } from 'ionicons/icons';
 
-const SelectorTrabajadores = ({ seleccionados, setSeleccionados }) => {
+const SelectorTrabajadores = ({ cargoSeleccionado, seleccionados, setSeleccionados }) => {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [trabajadores, setTrabajadores] = useState([]);
   const [temporalSeleccionados, setTemporalSeleccionados] = useState([]);
 
   useEffect(() => {
     const cargarTrabajadores = async () => {
-      try {
-        const trabajadoresObtenidos = await obtenerTrabajadores();
-        setTrabajadores(trabajadoresObtenidos);
-      } catch (error) {
-        console.error("No se pudieron cargar los trabajadores:", error);
+      if (cargoSeleccionado) {
+        try {
+          const trabajadoresObtenidos = await obtenerTrabajadoresPorCarId(cargoSeleccionado);
+          setTrabajadores(trabajadoresObtenidos);
+        } catch (error) {
+          console.error("No se pudieron cargar los trabajadores:", error);
+        }
       }
     };
 
     cargarTrabajadores();
-  }, []);
+  }, [cargoSeleccionado]);
 
   useEffect(() => {
     setTemporalSeleccionados(seleccionados);
@@ -59,7 +62,7 @@ const SelectorTrabajadores = ({ seleccionados, setSeleccionados }) => {
         onDidDismiss={() => setMostrarModal(false)}
       >
         <IonHeader className="d-flex justify-content-end align-items-center">
-        <IonButton
+          <IonButton
             className="fw-bold button-blue"
             fill="clear"
             onClick={() => setMostrarModal(false)}

@@ -30,8 +30,6 @@ const EppInsumos = () => {
   const [modalStage, setModalStage] = useState(0);
   const [motivo, setMotivo] = useState("");
   const [bodegaSeleccionada, setBodegaSeleccionada] = useState("");
-  
-  
 
   useEffect(() => {
     const cargarCargos = async () => {
@@ -100,12 +98,14 @@ const EppInsumos = () => {
 
   const handleAccept = () => {
     console.log({
-      Cargo: cargos.find(cargo => cargo.CAR_ID === cargoSeleccionado)?.CAR_NOMBRE,
+      Cargo: cargos.find((cargo) => cargo.CAR_ID === cargoSeleccionado)
+        ?.CAR_NOMBRE,
       TrabajadoresSeleccionados: seleccionados,
       InsumosSeleccionados: insumosSeleccionados,
       Motivo: motivo,
-      Bodega: bodegas.find(bodega => bodega.BOD_ID === bodegaSeleccionada)?.BOD_NOMBRE,
-  });
+      Bodega: bodegas.find((bodega) => bodega.BOD_ID === bodegaSeleccionada)
+        ?.BOD_NOMBRE,
+    });
     setModalStage(1);
     setTimeout(() => {
       setModalStage(2);
@@ -146,7 +146,7 @@ const EppInsumos = () => {
 
   return (
     <>
-       <CustomModal
+      <CustomModal
         isOpen={showModal}
         title={title}
         message={message}
@@ -181,26 +181,25 @@ const EppInsumos = () => {
             </IonSelect>
           </IonItem>
           {cargoSeleccionado && (
-            
             <>
-               <div className="container-fluid">
-              <div className="row">
-                <div className="col-6 px-0 pe-1 pe-md-2">
-                  <SelectorTrabajadores
-                    seleccionados={seleccionados}
-                    setSeleccionados={setSeleccionados}
-                  />
-                </div>
-                <div className="col-6 px-0 ps-1 ps-md-2">
-                  {seleccionados.length > 0 && (
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="col-6 px-0 pe-1 pe-md-2">
+                    <SelectorTrabajadores
+                      cargoSeleccionado={cargoSeleccionado}
+                      seleccionados={seleccionados}
+                      setSeleccionados={setSeleccionados}
+                    />
+                  </div>
+                  <div className="col-6 px-0 ps-1 ps-md-2">
                     <SelectorInsumos
+                      cargoSeleccionado={cargoSeleccionado}
                       insumosSeleccionados={insumosSeleccionados}
                       setInsumosSeleccionados={setInsumosSeleccionados}
                     />
-                  )}
+                  </div>
                 </div>
               </div>
-            </div>
               <IonLabel className="text-dark" position="stacked">
                 Motivo de entrega
               </IonLabel>
@@ -228,34 +227,47 @@ const EppInsumos = () => {
                   ))}
                 </IonSelect>
               </IonItem>
+              <IonLabel className="text-dark" position="stacked">
+                Resumen Trabajadores
+                <p className="fw-bold text-dark">
+                  Presione un trabajador para eliminar
+                </p>
+              </IonLabel>
               <TrabajadoresSeleccionados
                 seleccionados={seleccionados}
                 onEliminar={(trabajadorId) => {
                   const nuevosSeleccionados = seleccionados.filter(
-                    trabajador => trabajador.TRA_ID !== trabajadorId
+                    (trabajador) => trabajador.TRA_ID !== trabajadorId
                   );
                   setSeleccionados(nuevosSeleccionados);
                 }}
               />
-              {insumosSeleccionados.length > 0 && (
-                        <InsumosSeleccionados
-                        seleccionados={insumosSeleccionados}
-                        onEliminar={onEliminarInsumo} // Asumiendo que también tienes esta función
-                        onEditar={onEditar}
-                      />
-              )}
+              <IonLabel className="text-dark" position="stacked">
+                Resumen Insumos
+                <p className="fw-bold text-dark">
+                  Presione un insumo para eliminar
+                </p>
+              </IonLabel>
+              <InsumosSeleccionados
+                seleccionados={insumosSeleccionados}
+                onEliminar={onEliminarInsumo} // Asumiendo que también tienes esta función
+                onEditar={onEditar}
+              />
             </>
           )}
           <IonButton
             expand="block"
             onClick={() => setShowModal(true)}
-            disabled={!bodegaSeleccionada || seleccionados.length === 0 || insumosSeleccionados.length === 0}
+            disabled={
+              !bodegaSeleccionada ||
+              seleccionados.length === 0 ||
+              insumosSeleccionados.length === 0
+            }
             className="mx-0 mt-4 mb-3 fw-bold button-blue"
           >
             Validar y entregar
           </IonButton>
         </div>
-       
       </IonContent>
     </>
   );

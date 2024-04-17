@@ -6,7 +6,7 @@ const obtenerCargos = async () => {
 
     const respuesta = await axios.get(`${config.BASE_URL}cargo/get`);
     const cargos = respuesta.data;
-    console.log("CARGOS", cargos);
+    console.log("CARGOS", JSON.stringify(cargos, null, 2));
     return cargos;
   } catch (error) {
     console.error("Error al obtener los cargos:", error);

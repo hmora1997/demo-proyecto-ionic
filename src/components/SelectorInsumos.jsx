@@ -12,22 +12,30 @@ import {
   IonCheckbox,
 } from "@ionic/react";
 import { close, add, remove } from "ionicons/icons";
-import { obtenerInsumos } from "../services/insumos";
+import { obtenerInsumosPorCarId } from "../services/insumos";
 
-const SelectorInsumos = ({ insumosSeleccionados, setInsumosSeleccionados }) => {
+const SelectorInsumos = ({
+  cargoSeleccionado,
+  insumosSeleccionados,
+  setInsumosSeleccionados,
+}) => {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [insumos, setInsumos] = useState([]);
   const [seleccionados, setSeleccionados] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
+  const [toastMessage, setToastMessage] = "";
 
   useEffect(() => {
     const cargarInsumos = async () => {
       setIsLoading(true);
       try {
-        const insumosObtenidos = await obtenerInsumos();
-        setInsumos(insumosObtenidos);
+        const insumosObtenidos = await obtenerInsumosPorCarId(); 
+        const insumosFiltrados = insumosObtenidos.filter(
+          (insumo) => insumo.CAR_ID === cargoSeleccionado
+        );
+        console.log("Insumos filtrados para el cargo ID", cargoSeleccionado, insumosFiltrados); 
+        setInsumos(insumosFiltrados);
         setIsLoading(false);
       } catch (error) {
         console.error("No se pudieron cargar los insumos:", error);
@@ -37,8 +45,12 @@ const SelectorInsumos = ({ insumosSeleccionados, setInsumosSeleccionados }) => {
       }
     };
 
-    cargarInsumos();
-  }, []);
+    if (cargoSeleccionado) {
+      cargarInsumos();
+    } else {
+      setInsumos([]); // Limpia los insumos si no hay cargo seleccionado
+    }
+  }, [cargoSeleccionado]);
 
   useEffect(() => {
     const seleccionadosActualizados = insumosSeleccionados.reduce(
@@ -65,12 +77,12 @@ const SelectorInsumos = ({ insumosSeleccionados, setInsumosSeleccionados }) => {
   };
 
   const cambiarCantidad = (insumoId, incremento) => {
-    setSeleccionados(prev => ({
+    setSeleccionados((prev) => ({
       ...prev,
       [insumoId]: {
         ...prev[insumoId],
-        cantidad: Math.max(1, (prev[insumoId].cantidad || 0) + incremento)
-      }
+        cantidad: Math.max(1, (prev[insumoId].cantidad || 0) + incremento),
+      },
     }));
   };
 
@@ -104,12 +116,7 @@ const SelectorInsumos = ({ insumosSeleccionados, setInsumosSeleccionados }) => {
           </IonButton>
         </IonHeader>
         <IonLoading isOpen={isLoading} message="Cargando insumos..." />
-        <IonToast
-          isOpen={showToast}
-          message={toastMessage}
-          duration={2000}
-          onDidDismiss={() => setShowToast(false)}
-        />
+      
         <IonContent>
           <div className="list-group">
             {insumos.map((insumo) => (
@@ -117,6 +124,7 @@ const SelectorInsumos = ({ insumosSeleccionados, setInsumosSeleccionados }) => {
                 key={insumo.EPP_ID}
                 className="list-group-item d-flex position-relative align-items-center"
                 style={{ cursor: "pointer" }}
+                onClick={() => toggleSeleccion(insumo.EPP_ID)} // Se añade el onClick aquí
               >
                 <IonCheckbox
                   checked={!!seleccionados[insumo.EPP_ID]}
@@ -125,20 +133,28 @@ const SelectorInsumos = ({ insumosSeleccionados, setInsumosSeleccionados }) => {
                 />
                 <div className="ms-3 w-100 d-flex justify-content-between align-items-center">
                   <div className="flex-grow-1">
-                    <strong>{insumo.EPP_NOMBRE} - {insumo.EPP_DESCRIPCION}</strong>
+                    <strong>
+                      {insumo.EPP_NOMBRE} - {insumo.EPP_DESCRIPCION}
+                    </strong>
                   </div>
                   {seleccionados[insumo.EPP_ID] && (
                     <div className="d-flex align-items-center">
-                      <IonButton fill="clear" onClick={() => cambiarCantidad(insumo.EPP_ID, -1)}>
+                      <IonButton
+                        fill="clear"
+                        onClick={(e) => { e.stopPropagation(); cambiarCantidad(insumo.EPP_ID, -1); }}
+                      >
                         <IonIcon icon={remove} />
                       </IonButton>
                       <IonInput
                         type="number"
                         value={seleccionados[insumo.EPP_ID].cantidad.toString()}
                         className="mx-2"
-                        style={{ width: '60px', textAlign: 'center' }}
+                        style={{ width: "60px", textAlign: "center" }}
                       />
-                      <IonButton fill="clear" onClick={() => cambiarCantidad(insumo.EPP_ID, 1)}>
+                      <IonButton
+                        fill="clear"
+                        onClick={(e) => { e.stopPropagation(); cambiarCantidad(insumo.EPP_ID, 1); }}
+                      >
                         <IonIcon icon={add} />
                       </IonButton>
                     </div>
