@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
-import "./index.css"; // Asegúrate de que el camino sea correcto
-import Home from "./pages/Home";
+import "./index.css";
+import { AuthProvider } from "./AuthContext";
+import HomePage from "./pages/HomePage";
 import Login from "./components/Login/Login.jsx";
-import Insumos from "./pages/Insumos";
+import InsumosPage from "./pages/InsumosPage";
+import ConsultaPage from "./pages/ConsultaPage";
 import CustomModal from "./components/CustomModal";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import "@ionic/react/css/core.css";
 
@@ -24,7 +27,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 /* Theme variables */
 import "./theme/variables.css";
-import Consulta from "./pages/Consulta";
 
 
 setupIonicReact();
@@ -59,36 +61,36 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <IonApp>
-      <IonReactRouter>
-        <IonRouterOutlet>
-          <Route exact path="/home">
-            <Home />
-          </Route>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/consulta">
-            <Consulta />
-          </Route>
-          <Route exact path="/entrega-epp-insumos">
-            <Insumos />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/login" />
-          </Route>
-        </IonRouterOutlet>
-      </IonReactRouter>
+    <AuthProvider>
+      <IonApp>
+        <IonReactRouter>
+          <IonRouterOutlet>
+            <Route exact path="/login">
+              <Login />
+            </Route>
+            <Route exact path="/">
+              <Redirect to="/login" />
+            </Route>
+            <ProtectedRoute exact path="/home" component={HomePage} />
+            <ProtectedRoute exact path="/consulta" component={ConsultaPage} />
+            <ProtectedRoute
+              exact
+              path="/entrega-epp-insumos"
+              component={InsumosPage}
+            />
+          </IonRouterOutlet>
+        </IonReactRouter>
 
-      <CustomModal
-        isOpen={showNoInternetModal}
-        title="Error de Conexión"
-        message="Para seguir utilizando la aplicación, por favor verifica tu conexión a internet."
-        buttons={[]}
-        onClose={() => setShowNoInternetModal(false)}
-        isSubmitting={false}
-      />
-    </IonApp>
+        <CustomModal
+          isOpen={showNoInternetModal}
+          title="Error de Conexión"
+          message="Para seguir utilizando la aplicación, por favor verifica tu conexión a internet."
+          buttons={[]}
+          onClose={() => setShowNoInternetModal(false)}
+          isSubmitting={false}
+        />
+      </IonApp>
+    </AuthProvider>
   );
 };
 

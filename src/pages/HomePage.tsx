@@ -4,9 +4,7 @@ import "./Home.css";
 import MenuHome from "../components/MenuHome";
 import Header from "../components/Header"
 
-const Home: React.FC = () => {
-  const [username] = useState('admin@admin.cl'); // Aquí definimos el nombre de usuario estáticamente
-
+const HomePage: React.FC = () => {
   return (
     <IonPage>
     <Header />
@@ -17,4 +15,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default HomePage;

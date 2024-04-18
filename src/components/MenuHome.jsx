@@ -1,7 +1,7 @@
 import React from "react";
 import { IonContent, IonPage, IonButton } from "@ionic/react";
 import BotonNavegacion from "./BotonNavegacion";
-import UsuarioActual from './UsuarioActual'; 
+import UsuarioActual from "./UsuarioActual";
 import "./menu-home.css";
 
 const MenuHome = () => {
@@ -14,10 +14,10 @@ const MenuHome = () => {
 
         <BotonNavegacion
           texto="Entregar EPPs o Insumos"
-          href="/entrega-epp-insumos"
+          ruta="/entrega-epp-insumos"
         />
-        <BotonNavegacion texto="Consulta en Línea"  href="/consulta" />
-        <BotonNavegacion texto="Cerrar Sesión" href="/login" />
+        <BotonNavegacion texto="Consulta en Línea" ruta="/consulta" />
+        <BotonNavegacion texto="Cerrar Sesión" ruta="/login" />
       </div>
     </IonContent>
   );
