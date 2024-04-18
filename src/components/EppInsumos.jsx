@@ -97,7 +97,6 @@ const EppInsumos = () => {
     }, 300);
   };
 
-
   const handleAccept = async () => {
     console.log({
       Cargo: cargos.find((cargo) => cargo.CAR_ID === cargoSeleccionado)?.CAR_NOMBRE,
@@ -107,53 +106,73 @@ const EppInsumos = () => {
       Bodega: bodegas.find((bodega) => bodega.BOD_ID === bodegaSeleccionada)?.BOD_NOMBRE,
     });
   
+    // Mostrar el modal con spinner (modalStage 1)
+    setModalStage(1);
+    setShowModal(true);
+  
     let location, uuid;
   
-
     try {
       location = await getCurrentLocation();
-      console.log('Ubicación actual:', location);
+      console.log("Ubicación actual:", location);
     } catch (error) {
-      console.error('Error al obtener la ubicación:', error);
-      location = { coords: { latitude: "", longitude: "" }}; 
+      console.error("Error al obtener la ubicación:", error);
+      location = { coords: { latitude: "", longitude: "" } }; // Usar valores predeterminados o manejar el error apropiadamente
     }
   
-    // Intenta obtener el UUID del dispositivo Android
     try {
       const deviceInfo = await getDeviceInfo();
       uuid = deviceInfo.uuid || "";
-      console.log('Android UUID:', uuid);
+      console.log("Android UUID:", uuid);
     } catch (error) {
-      console.error('Error al obtener el Android UUID:', error);
-      uuid = ''; // Usar valor en blanco si falla
+      console.error("Error al obtener el Android UUID:", error);
+      uuid = ""; // Usar valor predeterminado o manejar el error apropiadamente
     }
   
-    // Enviar los datos, incluso si algunos son cadenas vacías
-    enviarSolicitudes(seleccionados, insumosSeleccionados, motivo, bodegaSeleccionada, 1, uuid, location);
+    try {
+      // Esperar la operación asíncrona de enviar solicitudes
+      await enviarSolicitudes(
+        seleccionados,
+        insumosSeleccionados,
+        motivo,
+        bodegaSeleccionada,
+        1,
+        uuid,
+        location
+      );
   
-    // Procesar cambios de UI después del envío
-    setModalStage(1);
-    setTimeout(() => {
-      setModalStage(2);
-    }, 3000);
+      // Añadir un tiempo de espera simulado para el proceso de carga
+      setTimeout(() => {
+        // Si el envío fue exitoso, actualizar el modalStage a confirmación (modalStage 2)
+        setModalStage(2);
+        // Puedes optar por cerrar el modal automáticamente después de un tiempo o tras el reconocimiento del usuario
+        setTimeout(() => {
+          setShowModal(false);
+          setModalStage(0); // Reiniciar el modalStage al estado inicial
+        }, 3000); // Ajusta este tiempo según sea necesario
+      }, 2000); // Tiempo simulado de 2 segundos para el proceso de carga
+    } catch (error) {
+      console.error("Error al enviar las solicitudes:", error);
+      // Manejar el error apropiadamente, tal vez mostrar un mensaje de error en el modal (modalStage 3)
+      setModalStage(3);
+    }
   };
+  
   
 
   let title, message, buttons;
   switch (modalStage) {
     case 0:
       title = "¿Está Seguro?";
-      message =
-        "¿Realmente desea proceder con las entregas de EPP o Insumos especificadas?";
+      message = "¿Realmente desea proceder con las entregas de EPP o Insumos especificadas?";
       buttons = [
         { text: "No", handler: closeModal, colorClass: "button-gris-modal" },
         { text: "Si", handler: handleAccept, colorClass: "button-blue-modal" },
       ];
       break;
-    case 1: // Submitting
+    case 1:
       title = "Realizando entregas...";
-      message =
-        "Esperar mientras se envía la información a la base de datos...";
+      message = "Esperar mientras se envía la información a la base de datos...";
       buttons = [];
       break;
     case 2:
@@ -167,9 +186,19 @@ const EppInsumos = () => {
         },
       ];
       break;
-    default:
+    case 3:
+      title = "Error";
+      message = "Hubo un problema al procesar su solicitud. Por favor, intente de nuevo más tarde.";
+      buttons = [
+        {
+          text: "Cerrar",
+          handler: closeModal,
+          colorClass: "button-red-modal",
+        },
+      ];
       break;
   }
+  
 
   return (
     <>
@@ -282,10 +311,17 @@ const EppInsumos = () => {
               />
             </>
           )}
-        <IonButton
+          <IonButton
   expand="block"
-  onClick={handleAccept} // Asegúrate de que está llamando a handleAccept
-  disabled={!bodegaSeleccionada || seleccionados.length === 0 || insumosSeleccionados.length === 0}
+  onClick={() => {
+    setShowModal(true); // Muestra el modal
+    setModalStage(0);   // Establece la etapa inicial del modal
+  }}
+  disabled={
+    !bodegaSeleccionada ||
+    seleccionados.length === 0 ||
+    insumosSeleccionados.length === 0
+  }
   className="mx-0 mt-4 mb-3 fw-bold button-blue"
 >
   Validar y entregar

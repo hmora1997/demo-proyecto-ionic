@@ -3,15 +3,21 @@ import config from '../config';
 
 export const enviarSolicitudes = async (trabajadores, insumosSeleccionados, motivo, idBodega, idUsuario, deviceId = "unknown_device_id", location) => {
   const url = `${config.BASE_URL}solicitud/insert`;
-  const formattedDate = new Date().toISOString();
+
 
   // Valores predeterminados seguros en caso de que location o deviceId sean undefined
   const safeDeviceId = deviceId || "default_device_id";
   const latitude = location?.coords?.latitude || "";
   const longitude = location?.coords?.longitude || "";
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const day = String(currentDate.getDate()).padStart(2, '0');
 
   trabajadores.forEach((trabajador, indexT) => {
     insumosSeleccionados.forEach((insumo, indexI) => {
+      const formattedDate = `${year}-${month}-${day}`;
+
       const formData = new FormData();
       formData.append('SOL_ANDROID', safeDeviceId);
       formData.append('SOL_GEO_X', latitude);
