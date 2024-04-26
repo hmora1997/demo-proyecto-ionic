@@ -1,4 +1,4 @@
-import LogoFoto from "../assets/logo-cbs.png";
+import LogoFoto from "../assets/c_garcia-logo.png";
 const Logo = ({ children, redirect }) => {
   return (
     <a href={redirect}>
@@ -6,7 +6,7 @@ const Logo = ({ children, redirect }) => {
       <img
         src={LogoFoto}
         alt={children}
-        className=" logo-header" // Asegúrate de que la clase logo-header esté definida en tu CSS
+        className=" logo-header" 
       />
     </a>
   );

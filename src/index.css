@@ -71,10 +71,9 @@ ion-item {
 }
 
 
-/* En tu archivo CSS global */
+
 .button-native-padding {
   padding: 16px 32px !important;
-  /* Ajusta el padding como desees */
 }
 
 
@@ -87,7 +86,6 @@ ion-item {
   background-image: url("./assets/fondo.png");
   background-repeat: no-repeat;
   background-size: cover;
-  /* Se mantendrá en cover para dispositivos móviles */
   background-position: center center;
 }
 
@@ -103,9 +101,8 @@ ion-item {
 }
 
 .logo-header {
-  width: 60px;
-  /* Ajusta el ancho según sea necesario */
+  width: 55px;
   height: auto;
-  /* Mantener la proporción de la imagen */
+
 
 }
