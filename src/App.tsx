@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom"; // Importa useHistory
 import "./index.css";
 import { AuthProvider } from "./AuthContext";
 import HomePage from "./pages/HomePage";
 import Login from "./components/Login/Login.jsx";
+import MenuPrincipalPage from "./pages/MenuPrincipalPage";
 import InsumosPage from "./pages/InsumosPage";
 import ConsultaPage from "./pages/ConsultaPage";
 import CustomModal from "./components/CustomModal";
+import Firma from "./components/Firma";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import "@ionic/react/css/core.css";
@@ -27,7 +29,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 /* Theme variables */
 import "./theme/variables.css";
-
 
 setupIonicReact();
 
@@ -72,7 +73,9 @@ const App: React.FC = () => {
               <Redirect to="/login" />
             </Route>
             <ProtectedRoute exact path="/home" component={HomePage} />
+            <ProtectedRoute exact path="/menu" component={MenuPrincipalPage} />
             <ProtectedRoute exact path="/consulta" component={ConsultaPage} />
+            <ProtectedRoute exact path="/firma" component={Firma} />
             <ProtectedRoute
               exact
               path="/entrega-epp-insumos"

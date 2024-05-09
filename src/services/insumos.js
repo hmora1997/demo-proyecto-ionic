@@ -16,7 +16,7 @@ const obtenerInsumos = async () => {
 
 const obtenerInsumosPorCarId = async (carId) => {
   try {
-    const url = `${config.BASE_URL}cargo_epp/get&CAR_ID=${carId}`;
+    const url = `${config.BASE_URL}cargo_epp/get&car_id=${carId}`;
     const response = await axios.get(url);
     console.log("Respuesta obtenida:", response.data);
 

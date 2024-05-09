@@ -17,7 +17,6 @@ const MenuHome = () => {
           ruta="/entrega-epp-insumos"
         />
         <BotonNavegacion texto="Consulta en Línea" ruta="/consulta" />
-        <BotonNavegacion texto="Cerrar Sesión" ruta="/login" />
       </div>
     </IonContent>
   );

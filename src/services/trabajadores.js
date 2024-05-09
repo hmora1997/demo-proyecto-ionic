@@ -14,7 +14,7 @@ const obtenerTrabajadores = async () => {
 
 const obtenerTrabajadoresPorCarId = async (carId) => {
   try {
-    const url = `${config.BASE_URL}trabajador/get&TRA_CAR_ID=${carId}`;
+    const url = `${config.BASE_URL}trabajador/get&tra_car_id=${carId}`;
     const response = await axios.get(url);
     console.log("Respuesta obtenida:", response.data);
 

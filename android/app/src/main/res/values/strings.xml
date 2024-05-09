@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">polodevApp</string>
-    <string name="title_activity_main">polodevApp</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="app_name">garciaEpp</string>
+    <string name="title_activity_main">garciaEpp</string>
+    <string name="package_name">com.polodev.garciaEpp</string>
+    <string name="custom_url_scheme">com.polodev.garciaEpp</string>
 </resources>

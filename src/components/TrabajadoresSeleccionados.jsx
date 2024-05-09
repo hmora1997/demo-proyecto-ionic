@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import { useRef, useState } from "react";
 import { IonActionSheet } from "@ionic/react";
-import { trash,close } from "ionicons/icons";
+import { trash, close, pencil } from "ionicons/icons";
+import { Link, useHistory } from "react-router-dom";
 
 const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
   const [showActionSheet, setShowActionSheet] = useState(false);
   const [trabajadorSeleccionado, setTrabajadorSeleccionado] = useState(null);
+  const history = useHistory();
 
   return (
     <div className="container-fluid px-0 mt-1">
@@ -23,14 +25,14 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
           {seleccionados.length > 0 ? (
             seleccionados.map((trabajador) => (
               <tr
-                key={trabajador.TRA_ID}
+                key={trabajador.tra_id}
                 onClick={() => {
                   setTrabajadorSeleccionado(trabajador);
                   setShowActionSheet(true);
                 }}
               >
-                <td>{trabajador.TRA_RUT_COMPLETO}</td>
-                <td>{`${trabajador.TRA_NOMBRES} ${trabajador.TRA_APELLIDOS}`}</td>
+                <td>{trabajador.tra_rut_completo}</td>
+                <td>{`${trabajador.tra_nombre_completo}`}</td>
               </tr>
             ))
           ) : (
@@ -47,11 +49,21 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
         header="Acciones"
         buttons={[
           {
+            text: "Firma",
+            role: "selected",
+            icon: pencil,
+            handler: () => {
+              history.push("/firma", {
+                trabajadorId: trabajadorSeleccionado.tra_id,
+              });
+            },
+          },
+          {
             text: "Eliminar",
             role: "destructive",
             icon: trash,
             handler: () => {
-              onEliminar(trabajadorSeleccionado.TRA_ID);
+              onEliminar(trabajadorSeleccionado.tra_id);
             },
           },
           {

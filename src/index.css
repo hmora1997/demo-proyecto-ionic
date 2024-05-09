@@ -40,7 +40,7 @@ ion-item {
 /* global.css o similar */
 .button-red {
   --background: #ff3b30;
-  /* Rojo */
+  background-color: #ff3b30 !important;
   --border-radius: 0;
   --color: white;
   --padding-top: 1rem;
@@ -83,7 +83,7 @@ ion-item {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-image: url("./assets/fondo.png");
+  background-image: url("./assets/bg.jpeg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;

@@ -1,5 +1,5 @@
 const config = {
-  BASE_URL: "http://179.61.13.234:8089/ws_cbs/epp_test/api.php?f=",
+  BASE_URL: "https://appso.cl/garciaepp/back/api.php?f=",
 };
 
 export default config;

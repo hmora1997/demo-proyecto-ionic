@@ -37,11 +37,11 @@ const SelectorTrabajadores = ({ cargoSeleccionado, seleccionados, setSeleccionad
 
   const toggleSeleccion = (trabajador) => {
     const estaSeleccionado = temporalSeleccionados.some(
-      (selec) => selec.TRA_ID === trabajador.TRA_ID
+      (selec) => selec.tra_id === trabajador.tra_id
     );
     if (estaSeleccionado) {
       setTemporalSeleccionados(
-        temporalSeleccionados.filter((selec) => selec.TRA_ID !== trabajador.TRA_ID)
+        temporalSeleccionados.filter((selec) => selec.tra_id !== trabajador.tra_id)
       );
     } else {
       setTemporalSeleccionados([...temporalSeleccionados, trabajador]);
@@ -55,7 +55,7 @@ const SelectorTrabajadores = ({ cargoSeleccionado, seleccionados, setSeleccionad
 
   return (
     <>
-      <IonButton onClick={() => setMostrarModal(true)} className="w-100 mx-0 mb-4 fw-bold button-blue">Trabajadores</IonButton>
+      <IonButton onClick={() => setMostrarModal(true)} className="w-100 mx-0 mb-4 fw-bold button-blue">Seleccionar Trabajadores</IonButton>
 
       <IonModal
         isOpen={mostrarModal}
@@ -83,16 +83,16 @@ const SelectorTrabajadores = ({ cargoSeleccionado, seleccionados, setSeleccionad
                   type="checkbox"
                   value=""
                   checked={temporalSeleccionados.some(
-                    (selec) => selec.TRA_ID === trabajador.TRA_ID
+                    (selec) => selec.tra_id === trabajador.tra_id
                   )}
                   onChange={() => toggleSeleccion(trabajador)}
                 />
                 <div className="ms-3 w-100">
                   <strong>
-                    {trabajador.TRA_NOMBRES} {trabajador.TRA_APELLIDOS}
+                    {trabajador.tra_nombre_completp}
                   </strong>
-                  <div>{trabajador.TRA_RUT_COMPLETO}</div>
-                  <div>{trabajador.CAR_NOMBRE || "Cargo no especificado"}</div>
+                  <div>{trabajador.tra_rut_completo}</div>
+                  <div>{trabajador.car_nombre || "Cargo no especificado"}</div>
                 </div>
               </label>
             ))}

@@ -22,14 +22,14 @@ const InsumosSeleccionados = ({ seleccionados, onEliminar, onEditar }) => {
                     {seleccionados.length > 0 ? (
                         seleccionados.map((insumo) => (
                             <tr 
-                                key={insumo.EPP_ID}
+                                key={insumo.epp_id}
                                 onClick={() => {
                                     setInsumoSeleccionado(insumo);
                                     setShowActionSheet(true);
                                 }}
                             >
-                                <td>{insumo.EPP_ID}</td>
-                                <td>{`${insumo.EPP_NOMBRE} - ${insumo.EPP_TALLA} - ${insumo.EPP_MARCA}`}</td>
+                                <td>{insumo.epp_id}</td>
+                                <td>{`${insumo.epp_nombre} - ${insumo.epp_talla} - ${insumo.epp_marca}`}</td>
                                 <td>{insumo.cantidad}</td>
                             </tr>
                         ))
@@ -51,7 +51,7 @@ const InsumosSeleccionados = ({ seleccionados, onEliminar, onEditar }) => {
                         role: 'destructive',
                         icon: trash,
                         handler: () => {
-                            onEliminar(insumoSeleccionado.EPP_ID);
+                            onEliminar(insumoSeleccionado.epp_id);
                         },
                     },
                     {
@@ -90,7 +90,7 @@ const InsumosSeleccionados = ({ seleccionados, onEliminar, onEditar }) => {
                     {
                         text: 'Ok',
                         handler: (alertData) => {
-                            onEditar(insumoSeleccionado.EPP_ID, parseInt(alertData.cantidad, 10) || 1);
+                            onEditar(insumoSeleccionado.epp_id, parseInt(alertData.cantidad, 10) || 1);
                             setShowAlert(false);
                         },
                     },

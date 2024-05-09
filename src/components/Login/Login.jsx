@@ -6,7 +6,7 @@ import {
   IonButton,
   IonItem,
   IonLabel,
-  IonToast
+  IonToast,
 } from "@ionic/react";
 import Logo from "../Logo";
 import { useAuth } from "../../AuthContext";
@@ -20,7 +20,7 @@ const Login = () => {
   const [toastMessage, setToastMessage] = useState("");
   const [toastColor, setToastColor] = useState("danger");
   const { login } = useAuth();
-  const history = useHistory();  // Inicializa useHistory
+  const history = useHistory(); // Inicializa useHistory
   const [buttonColor, setButtonColor] = useState("blue");
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -32,7 +32,7 @@ const Login = () => {
         setToastColor("success");
         setShowToast(true);
         setTimeout(() => {
-          history.push("/home"); // Redirigir a la página home si el login es exitoso
+          history.push("/menu"); // Redirigir a la página home si el login es exitoso
         }, 2000); // Dar tiempo para que el usuario vea el mensaje
       } else {
         setToastMessage("Usuario o contraseña incorrectos.");
@@ -46,11 +46,10 @@ const Login = () => {
     }
   };
 
-
   return (
     <IonPage>
       <IonContent>
-      <IonToast
+        <IonToast
           isOpen={showToast}
           onDidDismiss={() => setShowToast(false)}
           message={toastMessage}
@@ -69,7 +68,7 @@ const Login = () => {
               </div>
               <div className="card-body px-5 pb-5 card-color">
                 <h5 className="fw-bold text-center mt-3 fs-6 fs-md-5">
-                  Gestión de Insumos - CBS
+                  Gestión y control SOMA - CONSTRUCTORA GARCÍA
                 </h5>
                 <p className="text-dark text-center mb-4">
                   ¡Bienvenido de nuevo!
@@ -101,7 +100,13 @@ const Login = () => {
                       className=""
                     />
                   </IonItem>
-                  <IonButton expand="block" type="submit" className={`custom-button ${buttonColor === "red" ? "button-red" : "button-blue"}`}>
+                  <IonButton
+                    expand="block"
+                    type="submit"
+                    className={`custom-button ${
+                      buttonColor === "red" ? "button-red" : "button-blue"
+                    }`}
+                  >
                     Ingresar
                   </IonButton>
                 </form>

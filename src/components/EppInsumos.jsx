@@ -58,7 +58,7 @@ const EppInsumos = () => {
 
   const onEliminar = (trabajadorId) => {
     const nuevosSeleccionados = seleccionados.filter(
-      (trabajador) => trabajador.TRA_ID !== trabajadorId
+      (trabajador) => trabajador.tra_id !== trabajadorId
     );
     setSeleccionados(nuevosSeleccionados);
   };
@@ -66,14 +66,14 @@ const EppInsumos = () => {
   // En el componente padre
   const onEliminarInsumo = (insumoId) => {
     const nuevosInsumosSeleccionados = insumosSeleccionados.filter(
-      (insumo) => insumo.EPP_ID !== insumoId
+      (insumo) => insumo.epp_id !== insumoId
     );
     setInsumosSeleccionados(nuevosInsumosSeleccionados);
   };
 
   const onEditar = (insumoId, nuevaCantidad) => {
     const nuevosInsumosSeleccionados = insumosSeleccionados.map((insumo) =>
-      insumo.EPP_ID === insumoId
+      insumo.epp_id === insumoId
         ? { ...insumo, cantidad: nuevaCantidad }
         : insumo
     );
@@ -99,19 +99,21 @@ const EppInsumos = () => {
 
   const handleAccept = async () => {
     console.log({
-      Cargo: cargos.find((cargo) => cargo.CAR_ID === cargoSeleccionado)?.CAR_NOMBRE,
+      Cargo: cargos.find((cargo) => cargo.car_id === cargoSeleccionado)
+        ?.car_nombre,
       TrabajadoresSeleccionados: seleccionados,
       InsumosSeleccionados: insumosSeleccionados,
       Motivo: motivo,
-      Bodega: bodegas.find((bodega) => bodega.BOD_ID === bodegaSeleccionada)?.BOD_NOMBRE,
+      Bodega: bodegas.find((bodega) => bodega.bod_id === bodegaSeleccionada)
+        ?.bod_nombre,
     });
-  
+
     // Mostrar el modal con spinner (modalStage 1)
     setModalStage(1);
     setShowModal(true);
-  
+
     let location, uuid;
-  
+
     try {
       location = await getCurrentLocation();
       console.log("Ubicación actual:", location);
@@ -119,7 +121,7 @@ const EppInsumos = () => {
       console.error("Error al obtener la ubicación:", error);
       location = { coords: { latitude: "", longitude: "" } }; // Usar valores predeterminados o manejar el error apropiadamente
     }
-  
+
     try {
       const deviceInfo = await getDeviceInfo();
       uuid = deviceInfo.uuid || "";
@@ -128,7 +130,9 @@ const EppInsumos = () => {
       console.error("Error al obtener el Android UUID:", error);
       uuid = ""; // Usar valor predeterminado o manejar el error apropiadamente
     }
-  
+
+    console.log(insumosSeleccionados);
+
     try {
       // Esperar la operación asíncrona de enviar solicitudes
       await enviarSolicitudes(
@@ -140,7 +144,7 @@ const EppInsumos = () => {
         uuid,
         location
       );
-  
+
       // Añadir un tiempo de espera simulado para el proceso de carga
       setTimeout(() => {
         // Si el envío fue exitoso, actualizar el modalStage a confirmación (modalStage 2)
@@ -157,14 +161,13 @@ const EppInsumos = () => {
       setModalStage(3);
     }
   };
-  
-  
 
   let title, message, buttons;
   switch (modalStage) {
     case 0:
       title = "¿Está Seguro?";
-      message = "¿Realmente desea proceder con las entregas de EPP o Insumos especificadas?";
+      message =
+        "¿Realmente desea proceder con las entregas de EPP o Insumos especificadas?";
       buttons = [
         { text: "No", handler: closeModal, colorClass: "button-gris-modal" },
         { text: "Si", handler: handleAccept, colorClass: "button-blue-modal" },
@@ -172,7 +175,8 @@ const EppInsumos = () => {
       break;
     case 1:
       title = "Realizando entregas...";
-      message = "Esperar mientras se envía la información a la base de datos...";
+      message =
+        "Esperar mientras se envía la información a la base de datos...";
       buttons = [];
       break;
     case 2:
@@ -188,7 +192,8 @@ const EppInsumos = () => {
       break;
     case 3:
       title = "Error";
-      message = "Hubo un problema al procesar su solicitud. Por favor, intente de nuevo más tarde.";
+      message =
+        "Hubo un problema al procesar su solicitud. Por favor, intente de nuevo más tarde.";
       buttons = [
         {
           text: "Cerrar",
@@ -198,7 +203,6 @@ const EppInsumos = () => {
       ];
       break;
   }
-  
 
   return (
     <>
@@ -230,32 +234,58 @@ const EppInsumos = () => {
               placeholder="Seleccionar Cargo"
             >
               {cargos.map((cargo) => (
-                <IonSelectOption key={cargo.CAR_ID} value={cargo.CAR_ID}>
-                  {cargo.CAR_NOMBRE}
+                <IonSelectOption key={cargo.car_id} value={cargo.car_id}>
+                  {cargo.car_nombre}
                 </IonSelectOption>
               ))}
             </IonSelect>
           </IonItem>
           {cargoSeleccionado && (
             <>
-              <div className="container-fluid">
-                <div className="row">
-                  <div className="col-6 px-0 pe-1 pe-md-2">
-                    <SelectorTrabajadores
-                      cargoSeleccionado={cargoSeleccionado}
-                      seleccionados={seleccionados}
-                      setSeleccionados={setSeleccionados}
-                    />
-                  </div>
-                  <div className="col-6 px-0 ps-1 ps-md-2">
-                    <SelectorInsumos
-                      cargoSeleccionado={cargoSeleccionado}
-                      insumosSeleccionados={insumosSeleccionados}
-                      setInsumosSeleccionados={setInsumosSeleccionados}
-                    />
-                  </div>
-                </div>
+              <strong>Agregar Trabajador</strong>
+
+              <div className="container-fluid px-0 pe-md-2">
+                <SelectorTrabajadores
+                  cargoSeleccionado={cargoSeleccionado}
+                  seleccionados={seleccionados}
+                  setSeleccionados={setSeleccionados}
+                />
               </div>
+
+              <IonLabel className="text-dark" position="stacked">
+                Resumen Trabajadores
+                <p className="fw-bold text-dark">
+                  Presione un trabajador para eliminar
+                </p>
+              </IonLabel>
+              <TrabajadoresSeleccionados
+                seleccionados={seleccionados}
+                onEliminar={(trabajadorId) => {
+                  const nuevosSeleccionados = seleccionados.filter(
+                    (trabajador) => trabajador.tra_id !== trabajadorId
+                  );
+                  setSeleccionados(nuevosSeleccionados);
+                }}
+              />
+              <strong>Agregar Insumos</strong>
+              <div className="container-fluid px-0 pe-md-2">
+                <SelectorInsumos
+                  cargoSeleccionado={cargoSeleccionado}
+                  insumosSeleccionados={insumosSeleccionados}
+                  setInsumosSeleccionados={setInsumosSeleccionados}
+                />
+              </div>
+              <IonLabel className="text-dark" position="stacked">
+                Resumen Insumos
+                <p className="fw-bold text-dark">
+                  Presione un insumo para eliminar
+                </p>
+              </IonLabel>
+              <InsumosSeleccionados
+                seleccionados={insumosSeleccionados}
+                onEliminar={onEliminarInsumo} // Asumiendo que también tienes esta función
+                onEditar={onEditar}
+              />
               <IonLabel className="text-dark" position="stacked">
                 Motivo de entrega
               </IonLabel>
@@ -277,56 +307,29 @@ const EppInsumos = () => {
                   placeholder="Seleccionar Bodega"
                 >
                   {bodegas.map((bodega) => (
-                    <IonSelectOption key={bodega.BOD_ID} value={bodega.BOD_ID}>
-                      {bodega.BOD_NOMBRE}
+                    <IonSelectOption key={bodega.bod_id} value={bodega.bod_id}>
+                      {bodega.bod_nombre}
                     </IonSelectOption>
                   ))}
                 </IonSelect>
               </IonItem>
-              <IonLabel className="text-dark" position="stacked">
-                Resumen Trabajadores
-                <p className="fw-bold text-dark">
-                  Presione un trabajador para eliminar
-                </p>
-              </IonLabel>
-              <TrabajadoresSeleccionados
-                seleccionados={seleccionados}
-                onEliminar={(trabajadorId) => {
-                  const nuevosSeleccionados = seleccionados.filter(
-                    (trabajador) => trabajador.TRA_ID !== trabajadorId
-                  );
-                  setSeleccionados(nuevosSeleccionados);
-                }}
-              />
-              <IonLabel className="text-dark" position="stacked">
-                Resumen Insumos
-                <p className="fw-bold text-dark">
-                  Presione un insumo para eliminar
-                </p>
-              </IonLabel>
-              <InsumosSeleccionados
-                seleccionados={insumosSeleccionados}
-                onEliminar={onEliminarInsumo} // Asumiendo que también tienes esta función
-                onEditar={onEditar}
-              />
             </>
           )}
           <IonButton
-  expand="block"
-  onClick={() => {
-    setShowModal(true); // Muestra el modal
-    setModalStage(0);   // Establece la etapa inicial del modal
-  }}
-  disabled={
-    !bodegaSeleccionada ||
-    seleccionados.length === 0 ||
-    insumosSeleccionados.length === 0
-  }
-  className="mx-0 mt-4 mb-3 fw-bold button-blue"
->
-  Validar y entregar
-</IonButton>
-
+            expand="block"
+            onClick={() => {
+              setShowModal(true); // Muestra el modal
+              setModalStage(0); // Establece la etapa inicial del modal
+            }}
+            disabled={
+              !bodegaSeleccionada ||
+              seleccionados.length === 0 ||
+              insumosSeleccionados.length === 0
+            }
+            className="mx-0 mt-4 mb-3 fw-bold button-blue"
+          >
+            Validar y entregar
+          </IonButton>
         </div>
       </IonContent>
     </>
