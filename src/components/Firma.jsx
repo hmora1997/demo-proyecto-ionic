@@ -1,26 +1,17 @@
-import {
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonInput,
-  IonButton,
-  IonCol,
-  IonContent,
-  IonGrid,
-  IonHeader,
-  IonPage,
-  IonRow,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
-import { arrowUndoOutline, brushOutline, closeOutline } from "ionicons/icons";
 import { useState, useRef } from "react";
-import * as styles from "./Firma.css";
-
+import { Modal, Button } from "react-bootstrap";
 import CanvasDraw from "react-canvas-draw";
 import { SwatchesPicker } from "react-color";
+import "./Firma.css"; // Importa los estilos CSS para el modal
+import {
+  brushOutline,
+  closeOutline,
+  returnUpBackOutline,
+} from "ionicons/icons";
+import { IonIcon } from "@ionic/react";
+import arrayFirmas from "../services/globalArrays";
 
-const Firma = ({ trabajadorId }) => {
+const Firma = ({ position = {}, onClose }) => {
   const canvasRef = useRef(null);
   const [brushColor, setBrushColor] = useState("#000000");
   const [brushSize, setBrushSize] = useState(5);
@@ -36,95 +27,82 @@ const Firma = ({ trabajadorId }) => {
     setSavedDrawing(drawingData);
     const canvasImage =
       canvasRef.current.canvasContainer.children[1].toDataURL();
-    console.log(canvasImage);
+    arrayFirmas[position] = canvasImage;
+    onClose();
   };
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Firma Trabajador</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <div className={styles.canvasOptions}>
-          <IonGrid className={styles.fixed}>
-            <IonRow>
-              <IonCol size={showColorPicker ? "12" : "2"}>
-                <IonButton
+    <Modal show={true} onHide={() => {}}>
+      <Modal.Header closeButton>
+        <Modal.Title>Firma Trabajador</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="canvas-options">
+          <div className="container">
+            <div className="row">
+              <div className="col-1">
+                <button
+                  className="brush-btn text-center p-2"
                   style={{ backgroundColor: brushColor }}
-                  color={brushColor}
-                  expand="block"
                   onClick={() => setShowColorPicker(!showColorPicker)}
                 >
-                  <IonIcon icon={brushOutline} />
-                </IonButton>
-
+                  <IonIcon style={{ color: "white" }} icon={brushOutline} />
+                </button>
                 {showColorPicker && (
-                  <SwatchesPicker
-                    onChange={handleColorChange}
-                    className={styles.picker}
-                  />
+                  <SwatchesPicker onChange={handleColorChange} />
                 )}
-              </IonCol>
-
-              {!showColorPicker && (
-                <>
-                  <IonCol size="4">
-                    <IonItem lines="none">
-                      <IonLabel position="inset">Tamaño</IonLabel>
-                      <IonInput
-                        type="number"
-                        value={brushSize}
-                        onIonChange={(e) =>
-                          setBrushSize(parseInt(e.target.value))
-                        }
-                      />
-                    </IonItem>
-                  </IonCol>
-
-                  <IonCol size="3">
-                    <IonButton
-                      expand="full"
-                      color="primary"
-                      onClick={() => canvasRef.current.undo()}
-                    >
-                      <IonIcon icon={arrowUndoOutline} />
-                    </IonButton>
-                  </IonCol>
-
-                  <IonCol size="3">
-                    <IonButton
-                      expand="full"
-                      color="primary"
-                      onClick={() => canvasRef.current.clear()}
-                    >
-                      <IonIcon icon={closeOutline} />
-                    </IonButton>
-                  </IonCol>
-                </>
-              )}
-            </IonRow>
-            <IonRow>
-              <IonCol size="12">
-                <IonButton expand="block" onClick={saveDrawing}>
+              </div>
+              <div
+                className="col"
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  flexWrap: "nowrap",
+                }}
+              >
+                <label>Tamaño</label>
+                <input
+                  type="number"
+                  value={brushSize}
+                  onChange={(e) => setBrushSize(parseInt(e.target.value))}
+                />
+              </div>
+              <div className="col">
+                <Button
+                  variant="primary"
+                  onClick={() => canvasRef.current.undo()}
+                >
+                  <IonIcon icon={returnUpBackOutline} />
+                </Button>
+              </div>
+              <div className="col">
+                <Button
+                  variant="primary"
+                  onClick={() => canvasRef.current.clear()}
+                >
+                  <IonIcon icon={closeOutline} />
+                </Button>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col">
+                <Button variant="primary" onClick={saveDrawing}>
                   Guardar Firma
-                </IonButton>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
         <CanvasDraw
           brushRadius={brushSize}
           lazyRadius={0}
-          canvasHeight={window.innerHeight}
-          canvasWidth={window.innerWidth}
           brushColor={brushColor}
           ref={canvasRef}
         />
-        <div>{savedDrawing}</div>
-      </IonContent>
-    </IonPage>
+        {/* <div>{savedDrawing}</div> */}
+      </Modal.Body>
+    </Modal>
   );
 };
 

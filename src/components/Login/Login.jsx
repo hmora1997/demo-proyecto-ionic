@@ -68,7 +68,10 @@ const Login = () => {
               </div>
               <div className="card-body px-5 pb-5 card-color">
                 <h5 className="fw-bold text-center mt-3 fs-6 fs-md-5">
-                  Gestión y control SOMA - CONSTRUCTORA GARCÍA
+                  Gestión y control
+                </h5>
+                <h5 className="fw-bold text-center mt-1 fs-6 fs-md-5">
+                  SSOMA CONSTRUCTORA GARCÍA
                 </h5>
                 <p className="text-dark text-center mb-4">
                   ¡Bienvenido de nuevo!

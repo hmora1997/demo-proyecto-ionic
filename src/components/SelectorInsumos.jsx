@@ -33,15 +33,15 @@ const SelectorInsumos = ({
         const insumosObtenidos = await obtenerInsumosPorCarId(
           cargoSeleccionado
         );
-        console.log("Insumos Obtenidos",insumosObtenidos);
+        // console.log("Insumos Obtenidos",insumosObtenidos);
         const insumosFiltrados = insumosObtenidos.filter(
           (insumo) => insumo.car_id === cargoSeleccionado
         );
-        console.log(
-          "Insumos filtrados para el cargo ID",
-          cargoSeleccionado,
-          insumosFiltrados
-        );
+        // console.log(
+        //   "Insumos filtrados para el cargo ID",
+        //   cargoSeleccionado,
+        //   insumosFiltrados
+        // );
         setInsumos(insumosFiltrados);
         setIsLoading(false);
       } catch (error) {

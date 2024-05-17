@@ -3,7 +3,7 @@ import { useAuth } from "../AuthContext";
 
 const UsuarioActual = () => {
   const { userData } = useAuth();  
-  console.log(userData);
+  // console.log(userData);
   return (
     <div className="color-usuario w-100 text-white text-start ps-5 mb-3">
       <span className="fw-bold"> Usuario Actual:</span> 

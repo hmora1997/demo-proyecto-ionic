@@ -1,7 +1,7 @@
 import axios from 'axios';
 import config from '../config';
 
-export const enviarSolicitudes = async (trabajadores, insumosSeleccionados, motivo, idBodega, idUsuario, deviceId = "unknown_device_id", location) => {
+export const enviarSolicitudes = async (trabajadores, insumosSeleccionados, motivo, idBodega, idUsuario, deviceId = "unknown_device_id", location, firma) => {
   const url = `${config.BASE_URL}solicitud/insert`;
 
 
@@ -19,6 +19,9 @@ export const enviarSolicitudes = async (trabajadores, insumosSeleccionados, moti
     insumosSeleccionados.forEach((insumo, indexI) => {
       const formattedDate = `${year}-${month}-${day}`;
 
+      const firmaIndex = indexT;
+      const firmaTrabajador = firma[firmaIndex] || "";
+
       const formData = new FormData();
       formData.append('sol_android', safeDeviceId);
       formData.append('sol_geo_x', latitude);
@@ -33,17 +36,21 @@ export const enviarSolicitudes = async (trabajadores, insumosSeleccionados, moti
       formData.append('sol_fecha_entrega', formattedDate);
       formData.append('sol_motivo', motivo);
       formData.append('sol_bod_id', idBodega);
+      formData.append('sol_tra_firma', firmaTrabajador);
+
+      console.log(firmaTrabajador);
+
 
       axios.post(url, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
-      .then(response => console.log(`Solicitud enviada correctamente para trabajador ${indexT + 1} e insumo ${indexI + 1}:`, response.data))
-      .catch(error => {
-        console.error('Error al enviar la solicitud:', error);
-        console.error(`Datos de la solicitud con error: Trabajador ID ${trabajador.tra_id}, Insumo ID ${insumo.epp_id}`);
-      });
+        .then(response => console.log(`Solicitud enviada correctamente para trabajador ${indexT + 1} e insumo ${indexI + 1}:`, response.data))
+        .catch(error => {
+          console.error('Error al enviar la solicitud:', error);
+          console.error(`Datos de la solicitud con error: Trabajador ID ${trabajador.tra_id}, Insumo ID ${insumo.epp_id}`);
+        });
     });
   });
 };

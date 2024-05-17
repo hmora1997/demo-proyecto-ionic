@@ -1,17 +1,16 @@
 .canvasOptions {
 
-	position: absolute;
-	z-index: 99999;
-	width: 100vw;
+	position: absolute !important;
+	z-index: 99999 !important;
 	background-color: white !important;
 	border-bottom: 1px solid rgb(230, 230, 230);
 }
 
 .fixed {
 
-	position: fixed;
-	background-color: white;
-	border-bottom: 1px solid rgb(204, 204, 204);
+	position: fixed !important;
+	background-color: white !important;
+	border-bottom: 1px solid rgb(204, 204, 204) !important;
 }
 
 .picker {

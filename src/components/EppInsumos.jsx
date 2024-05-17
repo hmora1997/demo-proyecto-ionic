@@ -7,7 +7,6 @@ import SelectorInsumos from "./SelectorInsumos";
 import InsumosSeleccionados from "./InsumosSeleccionados";
 import {
   IonContent,
-  IonPage,
   IonLabel,
   IonInput,
   IonItem,
@@ -22,6 +21,7 @@ import { getDeviceInfo } from "../utils/androidId";
 
 import { getCurrentLocation } from "../utils/geolocalizacion";
 import { enviarSolicitudes } from "../services/insert";
+import arrayFirmas from "../services/globalArrays";
 const EppInsumos = () => {
   const [cargos, setCargos] = useState([]);
   const [bodegas, setBodegas] = useState([]);
@@ -98,15 +98,15 @@ const EppInsumos = () => {
   };
 
   const handleAccept = async () => {
-    console.log({
-      Cargo: cargos.find((cargo) => cargo.car_id === cargoSeleccionado)
-        ?.car_nombre,
-      TrabajadoresSeleccionados: seleccionados,
-      InsumosSeleccionados: insumosSeleccionados,
-      Motivo: motivo,
-      Bodega: bodegas.find((bodega) => bodega.bod_id === bodegaSeleccionada)
-        ?.bod_nombre,
-    });
+    // console.log({
+    //   Cargo: cargos.find((cargo) => cargo.car_id === cargoSeleccionado)
+    //     ?.car_nombre,
+    //   TrabajadoresSeleccionados: seleccionados,
+    //   InsumosSeleccionados: insumosSeleccionados,
+    //   Motivo: motivo,
+    //   Bodega: bodegas.find((bodega) => bodega.bod_id === bodegaSeleccionada)
+    //     ?.bod_nombre,
+    // });
 
     // Mostrar el modal con spinner (modalStage 1)
     setModalStage(1);
@@ -116,22 +116,23 @@ const EppInsumos = () => {
 
     try {
       location = await getCurrentLocation();
-      console.log("Ubicación actual:", location);
+      // console.log("Ubicación actual:", location);
     } catch (error) {
       console.error("Error al obtener la ubicación:", error);
       location = { coords: { latitude: "", longitude: "" } }; // Usar valores predeterminados o manejar el error apropiadamente
     }
+    console.log(arrayFirmas);
 
     try {
       const deviceInfo = await getDeviceInfo();
       uuid = deviceInfo.uuid || "";
-      console.log("Android UUID:", uuid);
+      // console.log("Android UUID:", uuid);
     } catch (error) {
       console.error("Error al obtener el Android UUID:", error);
       uuid = ""; // Usar valor predeterminado o manejar el error apropiadamente
     }
 
-    console.log(insumosSeleccionados);
+    // console.log(insumosSeleccionados);
 
     try {
       // Esperar la operación asíncrona de enviar solicitudes
@@ -142,7 +143,8 @@ const EppInsumos = () => {
         bodegaSeleccionada,
         1,
         uuid,
-        location
+        location,
+        arrayFirmas
       );
 
       // Añadir un tiempo de espera simulado para el proceso de carga
@@ -218,8 +220,9 @@ const EppInsumos = () => {
         <UsuarioActual usuario="admin@admin.cl" />
         <div className="container-fluid px-5 mt-4">
           <h2 className=" mb-3">Entregar EPP o Insumos</h2>
+          {/* Paso 1 */}
           <IonLabel className="text-dark" position="stacked">
-            Cargo, Trabajadores e Insumos
+            <strong>Paso 1: Seleccione cargo</strong>
           </IonLabel>
           <IonItem className="input-item mb-2">
             <IonSelect
@@ -242,7 +245,7 @@ const EppInsumos = () => {
           </IonItem>
           {cargoSeleccionado && (
             <>
-              <strong>Agregar Trabajador</strong>
+              <strong>Paso 2: Agregar Trabajador</strong>
 
               <div className="container-fluid px-0 pe-md-2">
                 <SelectorTrabajadores
@@ -255,7 +258,7 @@ const EppInsumos = () => {
               <IonLabel className="text-dark" position="stacked">
                 Resumen Trabajadores
                 <p className="fw-bold text-dark">
-                  Presione un trabajador para eliminar
+                  Presione un trabajador para firmar o eliminar
                 </p>
               </IonLabel>
               <TrabajadoresSeleccionados
@@ -267,7 +270,14 @@ const EppInsumos = () => {
                   setSeleccionados(nuevosSeleccionados);
                 }}
               />
-              <strong>Agregar Insumos</strong>
+            </>
+          )}
+          {/* Fin Paso 1 */}
+          {/* Insertar Boton de Paso 2 y redirigir a Paso 2 */}
+          {/* Paso 2 */}
+          {cargoSeleccionado && seleccionados.length > 0 && (
+            <>
+              <strong> Paso 3: Agregar Insumos</strong>
               <div className="container-fluid px-0 pe-md-2">
                 <SelectorInsumos
                   cargoSeleccionado={cargoSeleccionado}
@@ -286,19 +296,37 @@ const EppInsumos = () => {
                 onEliminar={onEliminarInsumo} // Asumiendo que también tienes esta función
                 onEditar={onEditar}
               />
+            </>
+          )}
+          {/* Fin Paso 2 */}
+          {/* Insertar Boton de Paso 3 y redirigir a Paso 3 */}
+          {/* Paso 3 Aca debe mostrar solamente tabla de trabajadores seleccionados y epps seleccionados */}
+          {insumosSeleccionados.length > 0 && (
+            <>
               <IonLabel className="text-dark" position="stacked">
-                Motivo de entrega
+                Paso 4: Motivo de entrega
               </IonLabel>
               <IonItem className="input-item mb-4">
-                <IonInput
-                  type="text"
+                <IonSelect
                   value={motivo}
                   onIonChange={(e) => setMotivo(e.detail.value)}
-                  placeholder="Ingrese el motivo"
-                />
+                  placeholder="Seleccione el motivo"
+                >
+                  <IonSelectOption value="PRIMERA ENTREGA">
+                    PRIMERA ENTREGA
+                  </IonSelectOption>
+                  <IonSelectOption value="EXTRAVÍO">EXTRAVÍO</IonSelectOption>
+                  <IonSelectOption value="AVERÍA">AVERÍA</IonSelectOption>
+                  <IonSelectOption value="VENCIMIENTO">
+                    VENCIMIENTO
+                  </IonSelectOption>
+                  <IonSelectOption value="OTROS MOTIVOS">
+                    OTROS MOTIVOS
+                  </IonSelectOption>
+                </IonSelect>
               </IonItem>
               <IonLabel className="text-dark" position="stacked">
-                Bodega
+                Paso 5: Bodega
               </IonLabel>
               <IonItem className="input-item mb-4">
                 <IonSelect
@@ -315,21 +343,24 @@ const EppInsumos = () => {
               </IonItem>
             </>
           )}
-          <IonButton
-            expand="block"
-            onClick={() => {
-              setShowModal(true); // Muestra el modal
-              setModalStage(0); // Establece la etapa inicial del modal
-            }}
-            disabled={
-              !bodegaSeleccionada ||
-              seleccionados.length === 0 ||
-              insumosSeleccionados.length === 0
-            }
-            className="mx-0 mt-4 mb-3 fw-bold button-blue"
-          >
-            Validar y entregar
-          </IonButton>
+
+          {/* Fin Paso 3 */}
+          {/* En el mismo paso 3 tiene que hacer el boton de enviar  */}
+          {seleccionados.length > 0 &&
+            insumosSeleccionados.length > 0 &&
+            bodegaSeleccionada.length > 0 &&
+            motivo.trim() != "" && (
+              <IonButton
+                expand="block"
+                onClick={() => {
+                  setShowModal(true); // Muestra el modal
+                  setModalStage(0); // Establece la etapa inicial del modal
+                }}
+                className="mx-0 mt-4 mb-3 fw-bold button-blue"
+              >
+                Validar y entregar
+              </IonButton>
+            )}
         </div>
       </IonContent>
     </>

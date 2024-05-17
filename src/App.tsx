@@ -75,7 +75,6 @@ const App: React.FC = () => {
             <ProtectedRoute exact path="/home" component={HomePage} />
             <ProtectedRoute exact path="/menu" component={MenuPrincipalPage} />
             <ProtectedRoute exact path="/consulta" component={ConsultaPage} />
-            <ProtectedRoute exact path="/firma" component={Firma} />
             <ProtectedRoute
               exact
               path="/entrega-epp-insumos"

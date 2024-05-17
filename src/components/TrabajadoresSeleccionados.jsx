@@ -1,12 +1,20 @@
-import { useRef, useState } from "react";
-import { IonActionSheet } from "@ionic/react";
+import { useState } from "react";
+import { IonActionSheet, IonIcon } from "@ionic/react";
 import { trash, close, pencil } from "ionicons/icons";
-import { Link, useHistory } from "react-router-dom";
+import Firma from "./Firma"; // Importa el componente de Firma
 
 const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
   const [showActionSheet, setShowActionSheet] = useState(false);
+  const [showModal, setShowModal] = useState(false); // Agrega estado para controlar la apertura del modal
   const [trabajadorSeleccionado, setTrabajadorSeleccionado] = useState(null);
-  const history = useHistory();
+  const [indexSeleccionado, setIndexSeleccionado] = useState(null);
+ 
+
+  const handleOpenActionSheet = (trabajador, index) => {
+    setTrabajadorSeleccionado(trabajador);
+    setIndexSeleccionado(index);
+    setShowActionSheet(true);
+  };
 
   return (
     <div className="container-fluid px-0 mt-1">
@@ -19,20 +27,21 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
             <th scope="col" className="th-custom">
               Nombre Completo
             </th>
+            <th scope="col" className="th-custom">
+              Firma
+            </th>
           </tr>
         </thead>
         <tbody>
           {seleccionados.length > 0 ? (
-            seleccionados.map((trabajador) => (
+            seleccionados.map((trabajador, index) => (
               <tr
                 key={trabajador.tra_id}
-                onClick={() => {
-                  setTrabajadorSeleccionado(trabajador);
-                  setShowActionSheet(true);
-                }}
+                onClick={() => handleOpenActionSheet(trabajador, index)}
               >
                 <td>{trabajador.tra_rut_completo}</td>
-                <td>{`${trabajador.tra_nombre_completo}`}</td>
+                <td>{trabajador.tra_nombre_completo}</td>
+                <td>{trabajador.tra_nombre_completo}</td>
               </tr>
             ))
           ) : (
@@ -43,6 +52,7 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
         </tbody>
       </table>
 
+      {/* IonActionSheet para las opciones */}
       <IonActionSheet
         isOpen={showActionSheet}
         onDidDismiss={() => setShowActionSheet(false)}
@@ -53,9 +63,8 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
             role: "selected",
             icon: pencil,
             handler: () => {
-              history.push("/firma", {
-                trabajadorId: trabajadorSeleccionado.tra_id,
-              });
+              setShowActionSheet(false); // Cierra el IonActionSheet
+              setShowModal(true); // Abre el modal Firma
             },
           },
           {
@@ -64,15 +73,25 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
             icon: trash,
             handler: () => {
               onEliminar(trabajadorSeleccionado.tra_id);
+              setShowActionSheet(false); // Cierra el IonActionSheet
             },
           },
           {
             text: "Cancelar",
             role: "cancel",
             icon: close,
+            handler: () => {
+              setShowActionSheet(false); // Cierra el IonActionSheet
+            },
           },
         ]}
       />
+      {showModal && ( // Mostrar el modal solo cuando showModal es true
+        <Firma
+          position={indexSeleccionado} // Pasa el índice seleccionado a la componente Firma
+          onClose={() => setShowModal(false)} // Cierra el modal Firma
+        />
+      )}
     </div>
   );
 };
