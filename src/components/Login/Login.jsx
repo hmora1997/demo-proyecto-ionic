@@ -30,8 +30,8 @@ const Login = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const handleInputChange = () => {
-    const username = usernameRef.current?.valueOf;
-    const password = passwordRef.current?.valueOf;
+    const username = usernameRef.current?.value;
+    const password = passwordRef.current?.value;
     setIsButtonDisabled(!username || !password);
   };
 
