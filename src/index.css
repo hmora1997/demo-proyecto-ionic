@@ -77,6 +77,10 @@ ion-item {
 }
 
 
+.gray-icon{
+  color: #a8a4a4;
+}
+
 
 .button-native-padding {
   padding: 16px 32px !important;

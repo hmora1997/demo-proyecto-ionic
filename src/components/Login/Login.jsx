@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   IonPage,
   IonContent,
@@ -7,42 +7,54 @@ import {
   IonItem,
   IonLabel,
   IonToast,
+  IonSpinner,
+  IonIcon,
 } from "@ionic/react";
+import { eyeOffOutline, eyeOutline } from "ionicons/icons";
 import Logo from "../Logo";
 import { useAuth } from "../../AuthContext";
 import { login as loginService } from "../../services/login";
 import { useHistory } from "react-router-dom";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const usernameRef = useRef("");
+  const passwordRef = useRef("");
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastColor, setToastColor] = useState("danger");
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
-  const history = useHistory(); // Inicializa useHistory
+  const history = useHistory();
   const [buttonColor, setButtonColor] = useState("blue");
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleLogin = async (e) => {
     e.preventDefault();
+    const username = usernameRef.current.value;
+    const password = passwordRef.current.value;
+    setLoading(true);
     try {
       const response = await loginService(username, password);
       if (response.data && response.data.length > 0) {
-        login(response.data[0]); // Guardar datos del usuario en el contexto
+        login(response.data[0]);
         setToastMessage("Inicio de sesión exitoso!");
         setToastColor("success");
         setShowToast(true);
         setTimeout(() => {
-          history.push("/menu"); // Redirigir a la página home si el login es exitoso
-        }, 2000); // Dar tiempo para que el usuario vea el mensaje
+          history.push("/menu");
+        }, 1700);
       } else {
         setToastMessage("Usuario o contraseña incorrectos.");
         setToastColor("danger");
         setShowToast(true);
+        setLoading(false);
       }
     } catch (error) {
+      console.error("Error en el inicio de sesión:", error);
       setToastMessage("Error al intentar iniciar sesión.");
       setToastColor("danger");
       setShowToast(true);
+      setLoading(false);
     }
   };
 
@@ -83,10 +95,9 @@ const Login = () => {
                   <IonItem className="input-item mb-4">
                     <IonInput
                       type="text"
-                      value={username}
+                      ref={usernameRef}
                       clearInput
                       placeholder="Nombre de usuario"
-                      onIonChange={(e) => setUsername(e.detail.value)}
                       className=""
                     />
                   </IonItem>
@@ -95,22 +106,31 @@ const Login = () => {
                   </IonLabel>
                   <IonItem className="input-item mb-4">
                     <IonInput
-                      type="password"
-                      value={password}
+                      type={showPassword ? "text" : "password"}
+                      ref={passwordRef}
                       placeholder="Contraseña"
-                      onIonChange={(e) => setPassword(e.detail.value)}
-                      clearInput
                       className=""
                     />
+                    <IonButton
+                      fill="clear"
+                      slot="end"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                     <IonIcon
+                     className="gray-icon"
+                        icon={showPassword ? eyeOffOutline : eyeOutline}
+                        style={{ fontSize: "24px" }} 
+                      />
+                    </IonButton>
                   </IonItem>
                   <IonButton
                     expand="block"
                     type="submit"
-                    className={`custom-button ${
-                      buttonColor === "red" ? "button-red" : "button-blue"
-                    }`}
+                    className={`custom-button ${buttonColor === "red" ? "button-red" : "button-blue"
+                      }`}
+                    disabled={loading}
                   >
-                    Ingresar
+                    {loading ? <IonSpinner name="crescent" /> : "Ingresar"}
                   </IonButton>
                 </form>
               </div>
