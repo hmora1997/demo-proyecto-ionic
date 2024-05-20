@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   IonPage,
   IonContent,
@@ -27,6 +27,13 @@ const Login = () => {
   const history = useHistory();
   const [buttonColor, setButtonColor] = useState("blue");
   const [showPassword, setShowPassword] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+  const handleInputChange = () => {
+    const username = usernameRef.current?.valueOf;
+    const password = passwordRef.current?.valueOf;
+    setIsButtonDisabled(!username || !password);
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -98,6 +105,7 @@ const Login = () => {
                       ref={usernameRef}
                       clearInput
                       placeholder="Nombre de usuario"
+                      onIonInput={handleInputChange}
                       className=""
                     />
                   </IonItem>
@@ -109,6 +117,7 @@ const Login = () => {
                       type={showPassword ? "text" : "password"}
                       ref={passwordRef}
                       placeholder="Contraseña"
+                      onIonInput={handleInputChange}
                       className=""
                     />
                     <IonButton
@@ -116,19 +125,18 @@ const Login = () => {
                       slot="end"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                     <IonIcon
-                     className="gray-icon"
+                      <IonIcon
+                        className="gray-icon"
                         icon={showPassword ? eyeOffOutline : eyeOutline}
-                        style={{ fontSize: "24px" }} 
+                        style={{ fontSize: "24px" }}
                       />
                     </IonButton>
                   </IonItem>
                   <IonButton
                     expand="block"
                     type="submit"
-                    className={`custom-button ${buttonColor === "red" ? "button-red" : "button-blue"
-                      }`}
-                    disabled={loading}
+                    className={`custom-button mx-0 ${buttonColor === "red" ? "button-red" : "button-blue"}`}
+                    disabled={loading || isButtonDisabled}
                   >
                     {loading ? <IonSpinner name="crescent" /> : "Ingresar"}
                   </IonButton>
