@@ -3,17 +3,29 @@ import { IonActionSheet, IonIcon } from "@ionic/react";
 import { trash, close, pencil } from "ionicons/icons";
 import Firma from "./Firma"; // Importa el componente de Firma
 
-const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
+const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados }) => {
   const [showActionSheet, setShowActionSheet] = useState(false);
   const [showModal, setShowModal] = useState(false); // Agrega estado para controlar la apertura del modal
   const [trabajadorSeleccionado, setTrabajadorSeleccionado] = useState(null);
   const [indexSeleccionado, setIndexSeleccionado] = useState(null);
- 
 
   const handleOpenActionSheet = (trabajador, index) => {
     setTrabajadorSeleccionado(trabajador);
     setIndexSeleccionado(index);
     setShowActionSheet(true);
+  };
+
+  const handleSaveFirma = (firma) => {
+    const updatedTrabajadores = [...seleccionados];
+    updatedTrabajadores[indexSeleccionado].firma = firma;
+    setSeleccionados(updatedTrabajadores);
+    setShowModal(false); // Cierra el modal Firma
+  };
+
+  const handleEliminar = (trabajadorId) => {
+    console.log('Eliminar trabajador con ID:', trabajadorId);
+    onEliminar(trabajadorId);
+    setShowActionSheet(false); // Cierra el IonActionSheet
   };
 
   return (
@@ -41,18 +53,23 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
               >
                 <td>{trabajador.tra_rut_completo}</td>
                 <td>{trabajador.tra_nombre_completo}</td>
-                <td>{trabajador.tra_nombre_completo}</td>
+                <td>
+                  {trabajador.firma ? (
+                    <img src={trabajador.firma} alt="Firma" style={{ height: "50px" }} />
+                  ) : (
+                    "Sin Firma"
+                  )}
+                </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="2">No hay Trabajadores seleccionados.</td>
+              <td colSpan="3">No hay Trabajadores seleccionados.</td>
             </tr>
           )}
         </tbody>
       </table>
 
-      {/* IonActionSheet para las opciones */}
       <IonActionSheet
         isOpen={showActionSheet}
         onDidDismiss={() => setShowActionSheet(false)}
@@ -72,8 +89,7 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
             role: "destructive",
             icon: trash,
             handler: () => {
-              onEliminar(trabajadorSeleccionado.tra_id);
-              setShowActionSheet(false); // Cierra el IonActionSheet
+              handleEliminar(trabajadorSeleccionado.tra_id);
             },
           },
           {
@@ -88,8 +104,9 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar }) => {
       />
       {showModal && ( // Mostrar el modal solo cuando showModal es true
         <Firma
-          position={indexSeleccionado} // Pasa el índice seleccionado a la componente Firma
+          position={indexSeleccionado} // Pasa el índice seleccionado al componente Firma
           onClose={() => setShowModal(false)} // Cierra el modal Firma
+          onSave={handleSaveFirma} // Función para guardar la firma
         />
       )}
     </div>

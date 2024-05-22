@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Modal, Button } from "react-bootstrap";
-import CanvasDraw from "react-canvas-draw";
+import SignatureCanvas from "react-signature-canvas";
 import { SwatchesPicker } from "react-color";
 import "./Firma.css"; // Importa los estilos CSS para el modal
 import {
@@ -8,39 +8,36 @@ import {
   closeOutline,
   returnUpBackOutline,
 } from "ionicons/icons";
-import { IonIcon } from "@ionic/react";
+import { IonButton, IonIcon } from "@ionic/react";
 import arrayFirmas from "../services/globalArrays";
 
-const Firma = ({ position = {}, onClose }) => {
+const Firma = ({ position = {}, onClose, onSave }) => {
   const canvasRef = useRef(null);
   const [brushColor, setBrushColor] = useState("#000000");
   const [brushSize, setBrushSize] = useState(5);
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const [savedDrawing, setSavedDrawing] = useState("");
 
   const handleColorChange = (colorValue) => {
     setBrushColor(colorValue.hex);
   };
 
   const saveDrawing = () => {
-    const drawingData = canvasRef.current.getSaveData();
-    setSavedDrawing(drawingData);
-    const canvasImage =
-      canvasRef.current.canvasContainer.children[1].toDataURL();
+    const canvasImage = canvasRef.current.getTrimmedCanvas().toDataURL();
     arrayFirmas[position] = canvasImage;
-    onClose();
+    console.log('Firma guardada:', arrayFirmas);
+    onSave(canvasImage);
   };
-
+  
   return (
-    <Modal show={true} onHide={() => {}}>
+    <Modal show={true} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>Firma Trabajador</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="canvas-options">
-          <div className="container">
+          <div className="container-fluid">
             <div className="row">
-              <div className="col-1">
+              <div className="col position-relative d-flex align-items-center">
                 <button
                   className="brush-btn text-center p-2"
                   style={{ backgroundColor: brushColor }}
@@ -49,18 +46,13 @@ const Firma = ({ position = {}, onClose }) => {
                   <IonIcon style={{ color: "white" }} icon={brushOutline} />
                 </button>
                 {showColorPicker && (
-                  <SwatchesPicker onChange={handleColorChange} />
+                  <div className="color-picker">
+                    <SwatchesPicker onChange={handleColorChange} />
+                  </div>
                 )}
               </div>
-              <div
-                className="col"
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  flexWrap: "nowrap",
-                }}
-              >
+
+              {/* <div className="col">
                 <label>Tamaño</label>
                 <input
                   type="number"
@@ -68,39 +60,44 @@ const Firma = ({ position = {}, onClose }) => {
                   onChange={(e) => setBrushSize(parseInt(e.target.value))}
                 />
               </div>
-              <div className="col">
+               <div className="col">
                 <Button
                   variant="primary"
                   onClick={() => canvasRef.current.undo()}
                 >
                   <IonIcon icon={returnUpBackOutline} />
                 </Button>
-              </div>
-              <div className="col">
-                <Button
-                  variant="primary"
+              </div>  */}
+              <div className="col d-flex justify-content-end align-items-center">
+                <IonButton
+                  expand="block"
                   onClick={() => canvasRef.current.clear()}
+                  className="custom-button mx-0 button-blue"
                 >
-                  <IonIcon icon={closeOutline} />
-                </Button>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col">
-                <Button variant="primary" onClick={saveDrawing}>
-                  Guardar Firma
-                </Button>
+                  BORRAR
+                </IonButton>
               </div>
             </div>
           </div>
         </div>
-        <CanvasDraw
-          brushRadius={brushSize}
-          lazyRadius={0}
-          brushColor={brushColor}
+        <SignatureCanvas
+          penColor={brushColor}
+          canvasProps={{ className: 'sigCanvas rounded-3 my-5', style: { pointerEvents: showColorPicker ? 'none' : 'auto' } }}
           ref={canvasRef}
         />
-        {/* <div>{savedDrawing}</div> */}
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col px-0">
+              <IonButton
+                expand="block"
+                onClick={saveDrawing}
+                className="custom-button mx-0 button-blue"
+              >
+                GUARDAR FIRMA
+              </IonButton>
+            </div>
+          </div>
+        </div>
       </Modal.Body>
     </Modal>
   );

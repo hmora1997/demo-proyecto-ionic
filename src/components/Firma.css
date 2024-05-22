@@ -1,5 +1,4 @@
 .canvasOptions {
-
 	position: absolute !important;
 	z-index: 99999 !important;
 	background-color: white !important;
@@ -7,13 +6,26 @@
 }
 
 .fixed {
-
 	position: fixed !important;
 	background-color: white !important;
 	border-bottom: 1px solid rgb(204, 204, 204) !important;
 }
 
 .picker {
-
 	width: 100% !important;
+}
+
+.sigCanvas {
+	width: 100%;
+	height: 200px;
+	border: 1px solid black;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.color-picker {
+	position: absolute;
+	top: 65px;
+	left: 0;
+	z-index: 1000;
 }

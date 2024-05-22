@@ -1,32 +1,29 @@
-section{
-    background-color: #f3f3f3;
-    height: 100%;
-}
-
-.menu-nav{
+.menu-nav {
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: #ffff;
-    margin: 20px 10px;
-    padding: 20px 0px;
     border-radius: 20px;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    padding: 20px 0;
+    width: 100%;
+    border: 1px solid #EFEFEF;
+   
 }
 
-.menu-nav a{
-    text-decoration: none;
-    color: black;
-    font-weight: bold;
-}
-.menu-nav p{    
+.menu-nav p {
     padding-top: 10px;
     margin: 0px;
 }
 
-.container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.menu-nav img {
+    margin-bottom: 10px;
 }
 
+.disabled-button .menu-nav p {
+    color: gray !important;
+}
+
+.menu-button::part(native) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
