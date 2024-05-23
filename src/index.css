@@ -99,9 +99,6 @@ ion-item {
   background-position: center center;
 }
 
-
-
-
 .card-color {
   background-color: #F3F3F3 !important;
 }
@@ -113,6 +110,14 @@ ion-item {
 .logo-header {
   width: 55px;
   height: auto;
+}
 
+.color-usuario{
+  background-color: #9BC050;
+}
 
+/* user-panel.css */
+.page-color {
+  --padding : 0;
+  --background: #F3F3F3; /* Establece el color de fondo para el contenido de la página */
 }

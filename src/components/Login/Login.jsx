@@ -28,6 +28,15 @@ const Login = () => {
   const [buttonColor, setButtonColor] = useState("blue");
   const [showPassword, setShowPassword] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  let timer = useRef();
+
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(timer.current);  // Limpia el temporizador cuando el componente se desmonta
+      setLoading(false);
+    };
+  }, []);
 
   const handleInputChange = () => {
     const username = usernameRef.current?.value;
@@ -35,11 +44,16 @@ const Login = () => {
     setIsButtonDisabled(!username || !password);
   };
 
+
   const handleLogin = async (e) => {
     e.preventDefault();
     const username = usernameRef.current.value;
     const password = passwordRef.current.value;
-    setLoading(true);
+
+    // Establece un retraso para mostrar el spinner
+    setLoading(false); // Asegúrate de que loading esté en false antes de reiniciar
+    timer.current = setTimeout(() => setLoading(true), 500); 
+
     try {
       const response = await loginService(username, password);
       if (response.data && response.data.length > 0) {
@@ -48,12 +62,15 @@ const Login = () => {
         setToastColor("success");
         setShowToast(true);
         setTimeout(() => {
+          clearTimeout(timer.current);
+          setLoading(false);
           history.push("/menu");
         }, 1700);
       } else {
         setToastMessage("Usuario o contraseña incorrectos.");
         setToastColor("danger");
         setShowToast(true);
+        clearTimeout(timer.current);
         setLoading(false);
       }
     } catch (error) {
@@ -61,93 +78,96 @@ const Login = () => {
       setToastMessage("Error al intentar iniciar sesión.");
       setToastColor("danger");
       setShowToast(true);
+      clearTimeout(timer.current);
       setLoading(false);
     }
   };
 
-  return (
-    <IonPage>
-      <IonContent>
-        <IonToast
-          isOpen={showToast}
-          onDidDismiss={() => setShowToast(false)}
-          message={toastMessage}
-          duration={2000}
-          color={toastColor}
-          position="top"
-        />
-        <div className="login-background">
-          <div
-            className="d-flex justify-content-center align-items-center m-3"
-            style={{ minHeight: "100%" }}
-          >
-            <div className="card w-100 rounded-0" style={{ maxWidth: "400px" }}>
-              <div className="card-header border-0 bg-light py-3 card-header-color text-center">
-                <Logo />
-              </div>
-              <div className="card-body px-5 pb-5 card-color">
-                <h5 className="fw-bold text-center mt-3 fs-6 fs-md-5">
-                  Gestión y control
-                </h5>
-                <h5 className="fw-bold text-center mt-1 fs-6 fs-md-5">
-                  SSOMA CONSTRUCTORA GARCÍA
-                </h5>
-                <p className="text-dark text-center mb-4">
-                  ¡Bienvenido de nuevo!
-                </p>
-                <form onSubmit={handleLogin}>
-                  <IonLabel className="text-dark" position="stacked">
-                    Usuario
-                  </IonLabel>
-                  <IonItem className="input-item mb-4">
-                    <IonInput
-                      type="text"
-                      ref={usernameRef}
-                      clearInput
-                      placeholder="Nombre de usuario"
-                      onIonInput={handleInputChange}
-                      className=""
-                    />
-                  </IonItem>
-                  <IonLabel className="text-dark" position="stacked">
-                    Contraseña
-                  </IonLabel>
-                  <IonItem className="input-item mb-4">
-                    <IonInput
-                      type={showPassword ? "text" : "password"}
-                      ref={passwordRef}
-                      placeholder="Contraseña"
-                      onIonInput={handleInputChange}
-                      className=""
-                    />
-                    <IonButton
-                      fill="clear"
-                      slot="end"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      <IonIcon
-                        className="gray-icon"
-                        icon={showPassword ? eyeOffOutline : eyeOutline}
-                        style={{ fontSize: "24px" }}
-                      />
-                    </IonButton>
-                  </IonItem>
+
+
+return (
+  <IonPage>
+    <IonContent>
+      <IonToast
+        isOpen={showToast}
+        onDidDismiss={() => setShowToast(false)}
+        message={toastMessage}
+        duration={2000}
+        color={toastColor}
+        position="top"
+      />
+      <div className="login-background">
+        <div
+          className="d-flex justify-content-center align-items-center m-3"
+          style={{ minHeight: "100%" }}
+        >
+          <div className="card w-100 rounded-0" style={{ maxWidth: "400px" }}>
+            <div className="card-header border-0 bg-light py-3 card-header-color text-center">
+              <Logo />
+            </div>
+            <div className="card-body px-5 pb-5 card-color">
+              <h5 className="fw-bold text-center mt-3 fs-6 fs-md-5">
+                Gestión y control
+              </h5>
+              <h5 className="fw-bold text-center mt-1 fs-6 fs-md-5">
+                SSOMA CONSTRUCTORA GARCÍA
+              </h5>
+              <p className="text-dark text-center mb-4">
+                ¡Bienvenido de nuevo!
+              </p>
+              <form onSubmit={handleLogin}>
+                <IonLabel className="text-dark" position="stacked">
+                  Usuario
+                </IonLabel>
+                <IonItem className="input-item mb-4">
+                  <IonInput
+                    type="text"
+                    ref={usernameRef}
+                    clearInput
+                    placeholder="Nombre de usuario"
+                    onIonInput={handleInputChange}
+                    className=""
+                  />
+                </IonItem>
+                <IonLabel className="text-dark" position="stacked">
+                  Contraseña
+                </IonLabel>
+                <IonItem className="input-item mb-4">
+                  <IonInput
+                    type={showPassword ? "text" : "password"}
+                    ref={passwordRef}
+                    placeholder="Contraseña"
+                    onIonInput={handleInputChange}
+                    className=""
+                  />
                   <IonButton
-                    expand="block"
-                    type="submit"
-                    className={`custom-button mx-0 ${buttonColor === "red" ? "button-red" : "button-blue"}`}
-                    disabled={loading || isButtonDisabled}
+                    fill="clear"
+                    slot="end"
+                    onClick={() => setShowPassword(!showPassword)}
                   >
-                    {loading ? <IonSpinner name="crescent" /> : "Ingresar"}
+                    <IonIcon
+                      className="gray-icon"
+                      icon={showPassword ? eyeOffOutline : eyeOutline}
+                      style={{ fontSize: "24px" }}
+                    />
                   </IonButton>
-                </form>
-              </div>
+                </IonItem>
+                <IonButton
+                  expand="block"
+                  type="submit"
+                  className={`custom-button mx-0 ${buttonColor === "red" ? "button-red" : "button-blue"}`}
+                  disabled={loading || isButtonDisabled}
+                >
+                  {loading ? <IonSpinner name="crescent" /> : "Ingresar"}
+                </IonButton>
+              </form>
             </div>
           </div>
         </div>
-      </IonContent>
-    </IonPage>
-  );
+      </div>
+    </IonContent>
+  </IonPage>
+);
 };
 
 export default Login;

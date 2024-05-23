@@ -1,23 +1,22 @@
-// ProtectedRoute.js
-
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
-import { useAuth } from "../AuthContext";
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
-  const { userData } = useAuth();
+  const { userData, loading } = useAuth();
+
+  if (loading) {
+    return <div></div>;
+  }
 
   return (
     <Route
       {...rest}
-      render={props =>
+      render={(props) =>
         userData ? (
           <Component {...props} />
         ) : (
-          <Redirect to={{
-            pathname: "/login",
-            state: { from: props.location }
-          }} />
+          <Redirect to="/login" />
         )
       }
     />

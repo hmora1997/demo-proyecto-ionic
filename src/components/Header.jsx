@@ -10,7 +10,7 @@ const Header = ({ showBackButton }) => {
           <div className="d-flex align-items-center">
             {showBackButton && (
               <IonButtons slot="start">
-                <IonBackButton defaultHref="/home" />
+                <IonBackButton defaultHref="/menu" />
               </IonButtons>
             )}
             <div>
