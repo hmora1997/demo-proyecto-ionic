@@ -11,7 +11,7 @@ import {
 import { IonButton, IonIcon } from "@ionic/react";
 import arrayFirmas from "../services/globalArrays";
 
-const Firma = ({ position = {}, onClose, onSave }) => {
+const Firma = ({ position = {}, onClose, onSave, onDelete }) => {
   const canvasRef = useRef(null);
   const [brushColor, setBrushColor] = useState("#000000");
   const [brushSize, setBrushSize] = useState(5);
@@ -27,7 +27,7 @@ const Firma = ({ position = {}, onClose, onSave }) => {
     console.log('Firma guardada:', arrayFirmas);
     onSave(canvasImage);
   };
-  
+
   return (
     <Modal show={true} onHide={onClose}>
       <Modal.Header closeButton>
@@ -51,23 +51,6 @@ const Firma = ({ position = {}, onClose, onSave }) => {
                   </div>
                 )}
               </div>
-
-              {/* <div className="col">
-                <label>Tamaño</label>
-                <input
-                  type="number"
-                  value={brushSize}
-                  onChange={(e) => setBrushSize(parseInt(e.target.value))}
-                />
-              </div>
-               <div className="col">
-                <Button
-                  variant="primary"
-                  onClick={() => canvasRef.current.undo()}
-                >
-                  <IonIcon icon={returnUpBackOutline} />
-                </Button>
-              </div>  */}
               <div className="col d-flex justify-content-end align-items-center">
                 <IonButton
                   expand="block"
@@ -95,6 +78,7 @@ const Firma = ({ position = {}, onClose, onSave }) => {
               >
                 GUARDAR FIRMA
               </IonButton>
+           
             </div>
           </div>
         </div>

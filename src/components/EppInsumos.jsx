@@ -19,7 +19,6 @@ import UsuarioActual from "./UsuarioActual";
 import { getDeviceInfo } from "../utils/androidId";
 import { getCurrentLocation } from "../utils/geolocalizacion";
 import { enviarSolicitudes } from "../services/insert";
-import arrayFirmas from "../services/globalArrays";
 
 const EppInsumos = () => {
   const [cargos, setCargos] = useState([]);
@@ -27,6 +26,7 @@ const EppInsumos = () => {
   const [cargoSeleccionado, setCargoSeleccionado] = useState("");
   const [seleccionados, setSeleccionados] = useState([]);
   const [insumosSeleccionados, setInsumosSeleccionados] = useState([]);
+  const [firmas, setFirmas] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [modalStage, setModalStage] = useState(0);
   const [motivo, setMotivo] = useState("");
@@ -56,13 +56,19 @@ const EppInsumos = () => {
   }, []);
 
   const onEliminar = (trabajadorId) => {
+    // Eliminar firma del objeto firmas
+    const nuevasFirmas = { ...firmas };
+    delete nuevasFirmas[trabajadorId];
+    console.log('Firma eliminada:', nuevasFirmas);
+
+    // Eliminar trabajador de seleccionados
     const nuevosSeleccionados = seleccionados.filter(
       (trabajador) => trabajador.tra_id !== trabajadorId
     );
     setSeleccionados(nuevosSeleccionados);
+    setFirmas(nuevasFirmas);
   };
 
-  // En el componente padre
   const onEliminarInsumo = (insumoId) => {
     const nuevosInsumosSeleccionados = insumosSeleccionados.filter(
       (insumo) => insumo.epp_id !== insumoId
@@ -86,6 +92,7 @@ const EppInsumos = () => {
     if (modalStage === 2) {
       setSeleccionados([]);
       setInsumosSeleccionados([]);
+      setFirmas({});
       setBodegaSeleccionada("");
       setCargoSeleccionado("");
       setMotivo("");
@@ -126,7 +133,7 @@ const EppInsumos = () => {
         1,
         uuid,
         location,
-        arrayFirmas
+        firmas
       );
 
       setTimeout(() => {
@@ -208,6 +215,7 @@ const EppInsumos = () => {
                 setCargoSeleccionado(e.detail.value);
                 setSeleccionados([]);
                 setInsumosSeleccionados([]);
+                setFirmas({});
                 setBodegaSeleccionada("");
                 setMotivo("");
               }}
@@ -238,13 +246,10 @@ const EppInsumos = () => {
               </IonLabel>
               <TrabajadoresSeleccionados
                 seleccionados={seleccionados}
-                setSeleccionados={setSeleccionados} // Pasar la función setSeleccionados
-                onEliminar={(trabajadorId) => {
-                  const nuevosSeleccionados = seleccionados.filter(
-                    (trabajador) => trabajador.tra_id !== trabajadorId
-                  );
-                  setSeleccionados(nuevosSeleccionados);
-                }}
+                setSeleccionados={setSeleccionados}
+                onEliminar={onEliminar}
+                firmas={firmas}
+                setFirmas={setFirmas}
               />
             </>
           )}
@@ -266,7 +271,7 @@ const EppInsumos = () => {
               </IonLabel>
               <InsumosSeleccionados
                 seleccionados={insumosSeleccionados}
-                onEliminar={onEliminarInsumo} // Asumiendo que también tienes esta función
+                onEliminar={onEliminarInsumo}
                 onEditar={onEditar}
               />
             </>
@@ -320,8 +325,8 @@ const EppInsumos = () => {
               <IonButton
                 expand="block"
                 onClick={() => {
-                  setShowModal(true); // Muestra el modal
-                  setModalStage(0); // Establece la etapa inicial del modal
+                  setShowModal(true);
+                  setModalStage(0);
                 }}
                 className="mx-0 mt-4 mb-3 fw-bold button-blue"
               >

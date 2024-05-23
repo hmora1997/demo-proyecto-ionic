@@ -16,7 +16,7 @@ const obtenerTrabajadoresPorCarId = async (carId) => {
   try {
     const url = `${config.BASE_URL}trabajador/get&tra_car_id=${carId}`;
     const response = await axios.get(url);
-    console.log("Respuesta obtenida:", response.data);
+  
 
     if (response.data && Array.isArray(response.data)) {
       return response.data; // Asegúrate de que siempre es un array

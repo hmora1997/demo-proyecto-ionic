@@ -18,7 +18,7 @@ const Header = ({ showBackButton }) => {
               <h5 className="m-0 fs-6 fs-md-4">Constructora García</h5>
             </div>
           </div>
-          <Logo redirect={'/home'}>
+          <Logo redirect={'/menu'}>
             Logito
           </Logo>
         </div>

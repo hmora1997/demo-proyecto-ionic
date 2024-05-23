@@ -3,7 +3,7 @@ import { IonActionSheet, IonIcon } from "@ionic/react";
 import { trash, close, pencil } from "ionicons/icons";
 import Firma from "./Firma"; // Importa el componente de Firma
 
-const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados }) => {
+const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados, firmas, setFirmas }) => {
   const [showActionSheet, setShowActionSheet] = useState(false);
   const [showModal, setShowModal] = useState(false); // Agrega estado para controlar la apertura del modal
   const [trabajadorSeleccionado, setTrabajadorSeleccionado] = useState(null);
@@ -16,15 +16,27 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados
   };
 
   const handleSaveFirma = (firma) => {
-    const updatedTrabajadores = [...seleccionados];
-    updatedTrabajadores[indexSeleccionado].firma = firma;
-    setSeleccionados(updatedTrabajadores);
+    const updatedFirmas = { ...firmas, [trabajadorSeleccionado.tra_id]: firma };
+    setFirmas(updatedFirmas);
+    console.log('Firma guardada:', updatedFirmas);
+    setShowModal(false); // Cierra el modal Firma
+  };
+
+  const handleDeleteFirma = () => {
+    const updatedFirmas = { ...firmas };
+    delete updatedFirmas[trabajadorSeleccionado.tra_id];
+    console.log('Firma eliminada:', updatedFirmas);
+    setFirmas(updatedFirmas);
     setShowModal(false); // Cierra el modal Firma
   };
 
   const handleEliminar = (trabajadorId) => {
     console.log('Eliminar trabajador con ID:', trabajadorId);
     onEliminar(trabajadorId);
+    const updatedFirmas = { ...firmas };
+    delete updatedFirmas[trabajadorId];
+    console.log('Firma eliminada:', updatedFirmas);
+    setFirmas(updatedFirmas);
     setShowActionSheet(false); // Cierra el IonActionSheet
   };
 
@@ -54,8 +66,8 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados
                 <td>{trabajador.tra_rut_completo}</td>
                 <td>{trabajador.tra_nombre_completo}</td>
                 <td>
-                  {trabajador.firma ? (
-                    <img src={trabajador.firma} alt="Firma" style={{ height: "50px" }} />
+                  {firmas[trabajador.tra_id] ? (
+                    <img src={firmas[trabajador.tra_id]} alt="Firma" style={{ height: "50px" }} />
                   ) : (
                     "Sin Firma"
                   )}
@@ -107,6 +119,7 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados
           position={indexSeleccionado} // Pasa el índice seleccionado al componente Firma
           onClose={() => setShowModal(false)} // Cierra el modal Firma
           onSave={handleSaveFirma} // Función para guardar la firma
+          onDelete={handleDeleteFirma} // Función para eliminar la firma
         />
       )}
     </div>
