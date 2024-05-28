@@ -21,14 +21,14 @@ const obtenerInsumosPorCarId = async (carId) => {
     
 
     if (response.data && Array.isArray(response.data)) {
-      return response.data; // Asegúrate de que siempre es un array
+      return response.data;
     } else {
       console.warn('Respuesta inesperada, no es un array:', response.data);
-      return []; // Devuelve un arreglo vacío si la respuesta no es un arreglo
+      return [];
     }
   } catch (error) {
     console.error("Error al obtener los trabajadores por CAR_ID:", error);
-    return []; // Devuelve un arreglo vacío en caso de error
+    return [];
   }
 };
 

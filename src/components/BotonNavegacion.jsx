@@ -1,13 +1,17 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-const BotonNavegacion = ({ texto, ruta, colorButton, disabled }) => {
+const BotonNavegacion = ({ texto, ruta, colorButton, disabled, onClick }) => {
   if (!colorButton) colorButton = "button-blue mx-0";
   const history = useHistory();
 
   const handleOnClick = () => {
     if (!disabled) {
-      history.push(ruta);
+      if (onClick) {
+        onClick();
+      } else if (ruta) {
+        history.push(ruta);
+      }
     }
   };
 

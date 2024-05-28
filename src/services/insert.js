@@ -1,12 +1,19 @@
 import axios from 'axios';
 import config from '../config';
 
-export const enviarSolicitudes = async (trabajadores, insumosSeleccionados, motivo, idBodega, idUsuario, deviceId = "unknown_device_id", location, firma) => {
+export const enviarSolicitudes = async (
+  trabajadores,
+  insumosSeleccionados,
+  motivo,
+  idBodega,
+  idUsuario,
+  deviceId = "unknown_device_id",
+  location,
+  firmas,
+  firmaSupervisor
+) => {
   const url = `${config.BASE_URL}solicitud/insert`;
 
-
-
-  // Valores predeterminados seguros en caso de que location o deviceId sean undefined
   const safeDeviceId = deviceId || "default_device_id";
   const latitude = location?.coords?.latitude || "";
   const longitude = location?.coords?.longitude || "";
@@ -18,9 +25,10 @@ export const enviarSolicitudes = async (trabajadores, insumosSeleccionados, moti
   trabajadores.forEach((trabajador, indexT) => {
     insumosSeleccionados.forEach((insumo, indexI) => {
       const formattedDate = `${year}-${month}-${day}`;
+      const firmaTrabajador = firmas[trabajador.tra_id] || "";
 
-      const firmaIndex = indexT;
-      const firmaTrabajador = firma[firmaIndex] || "";
+      console.log('Enviando firma para trabajador:', trabajador.tra_id, 'Firma:', firmaTrabajador);
+      console.log('Firma del supervisor:', firmaSupervisor);
 
       const formData = new FormData();
       formData.append('sol_android', safeDeviceId);
@@ -37,9 +45,9 @@ export const enviarSolicitudes = async (trabajadores, insumosSeleccionados, moti
       formData.append('sol_motivo', motivo);
       formData.append('sol_bod_id', idBodega);
       formData.append('sol_tra_firma', firmaTrabajador);
+      formData.append('sol_supervisor_firma', firmaSupervisor); // Añade la firma del supervisor
 
-      console.log(firmaTrabajador);
-
+      console.log('FormData:', Object.fromEntries(formData.entries())); // Verifica el contenido de FormData
 
       axios.post(url, formData, {
         headers: {

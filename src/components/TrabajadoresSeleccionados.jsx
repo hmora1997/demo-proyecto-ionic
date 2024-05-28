@@ -92,8 +92,8 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados
             role: "selected",
             icon: pencil,
             handler: () => {
-              setShowActionSheet(false); // Cierra el IonActionSheet
-              setShowModal(true); // Abre el modal Firma
+              setShowActionSheet(false); 
+              setShowModal(true); 
             },
           },
           {
@@ -109,17 +109,18 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados
             role: "cancel",
             icon: close,
             handler: () => {
-              setShowActionSheet(false); // Cierra el IonActionSheet
+              setShowActionSheet(false); 
             },
           },
         ]}
       />
-      {showModal && ( // Mostrar el modal solo cuando showModal es true
+      {showModal && (
         <Firma
-          position={indexSeleccionado} // Pasa el índice seleccionado al componente Firma
-          onClose={() => setShowModal(false)} // Cierra el modal Firma
-          onSave={handleSaveFirma} // Función para guardar la firma
-          onDelete={handleDeleteFirma} // Función para eliminar la firma
+          title={`Firma Trabajador ${trabajadorSeleccionado.tra_nombre_completo}`}
+          position={indexSeleccionado} 
+          onClose={() => setShowModal(false)}
+          onSave={handleSaveFirma}
+          onDelete={handleDeleteFirma}
         />
       )}
     </div>

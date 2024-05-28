@@ -12,6 +12,7 @@ import {
   IonButton,
   IonSelect,
   IonSelectOption,
+  IonToast,
 } from "@ionic/react";
 import "./epp-insumos.css";
 import CustomModal from "./CustomModal";
@@ -19,6 +20,9 @@ import UsuarioActual from "./UsuarioActual";
 import { getDeviceInfo } from "../utils/androidId";
 import { getCurrentLocation } from "../utils/geolocalizacion";
 import { enviarSolicitudes } from "../services/insert";
+import { useAuth } from "../AuthContext";
+import Firma from "./Firma"; // Importa el componente de firma del supervisor
+import { arrayFirmas, arrayFirmasSupervisor } from "../services/globalArrays"; // Importa ambos arrays
 
 const EppInsumos = () => {
   const [cargos, setCargos] = useState([]);
@@ -31,6 +35,9 @@ const EppInsumos = () => {
   const [modalStage, setModalStage] = useState(0);
   const [motivo, setMotivo] = useState("");
   const [bodegaSeleccionada, setBodegaSeleccionada] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [showSupervisorModal, setShowSupervisorModal] = useState(false);
+  const { userData } = useAuth();
 
   useEffect(() => {
     const cargarCargos = async () => {
@@ -56,12 +63,10 @@ const EppInsumos = () => {
   }, []);
 
   const onEliminar = (trabajadorId) => {
-    // Eliminar firma del objeto firmas
     const nuevasFirmas = { ...firmas };
     delete nuevasFirmas[trabajadorId];
     console.log('Firma eliminada:', nuevasFirmas);
 
-    // Eliminar trabajador de seleccionados
     const nuevosSeleccionados = seleccionados.filter(
       (trabajador) => trabajador.tra_id !== trabajadorId
     );
@@ -96,6 +101,7 @@ const EppInsumos = () => {
       setBodegaSeleccionada("");
       setCargoSeleccionado("");
       setMotivo("");
+      arrayFirmasSupervisor[0] = "";
     }
 
     setTimeout(() => {
@@ -124,29 +130,49 @@ const EppInsumos = () => {
       uuid = "";
     }
 
+    console.log('Firmas antes de enviar:', firmas);
+    console.log('Firma del supervisor antes de enviar:', arrayFirmasSupervisor[0]);
+
     try {
       await enviarSolicitudes(
         seleccionados,
         insumosSeleccionados,
         motivo,
         bodegaSeleccionada,
-        1,
+        userData.usu_id,
         uuid,
         location,
-        firmas
+        firmas,
+        arrayFirmasSupervisor[0]
       );
 
       setTimeout(() => {
         setModalStage(2);
-        setTimeout(() => {
-          setShowModal(false);
-          setModalStage(0);
-        }, 3000);
       }, 2000);
+
     } catch (error) {
       console.error("Error al enviar las solicitudes:", error);
       setModalStage(3);
     }
+  };
+
+  const todasFirmasPresentes = () => {
+    return seleccionados.every(trabajador => firmas[trabajador.tra_id]);
+  };
+
+  const handleButtonClick = () => {
+    if (todasFirmasPresentes()) {
+      setShowSupervisorModal(true);
+    } else {
+      setShowToast(true);
+    }
+  };
+
+  const handleSaveSupervisorFirma = (firma) => {
+    arrayFirmasSupervisor[0] = firma;
+    setShowSupervisorModal(false);
+    setShowModal(true);
+    setModalStage(0);
   };
 
   let title, message, buttons;
@@ -231,7 +257,7 @@ const EppInsumos = () => {
           {cargoSeleccionado && (
             <>
               <strong>Paso 2: Agregar Trabajador</strong>
-              <div className="container-fluid px-0 pe-md-2">
+              <div className="container-fluid px-0">
                 <SelectorTrabajadores
                   cargoSeleccionado={cargoSeleccionado}
                   seleccionados={seleccionados}
@@ -256,7 +282,7 @@ const EppInsumos = () => {
           {cargoSeleccionado && seleccionados.length > 0 && (
             <>
               <strong>Paso 3: Agregar Insumos</strong>
-              <div className="container-fluid px-0 pe-md-2">
+              <div className="container-fluid px-0">
                 <SelectorInsumos
                   cargoSeleccionado={cargoSeleccionado}
                   insumosSeleccionados={insumosSeleccionados}
@@ -324,10 +350,7 @@ const EppInsumos = () => {
             motivo.trim() !== "" && (
               <IonButton
                 expand="block"
-                onClick={() => {
-                  setShowModal(true);
-                  setModalStage(0);
-                }}
+                onClick={handleButtonClick}
                 className="mx-0 mt-4 mb-3 fw-bold button-blue"
               >
                 Validar y entregar
@@ -335,6 +358,21 @@ const EppInsumos = () => {
             )}
         </div>
       </IonContent>
+      <IonToast
+        isOpen={showToast}
+        onDidDismiss={() => setShowToast(false)}
+        message="Faltan firmas para uno o más trabajadores."
+        duration={2000}
+      />
+      {showSupervisorModal && (
+        <Firma
+          title="Firma Supervisor"
+          position={0}
+          onClose={() => setShowSupervisorModal(false)}
+          onSave={handleSaveSupervisorFirma}
+          isSupervisor={true}
+        />
+      )}
     </>
   );
 };

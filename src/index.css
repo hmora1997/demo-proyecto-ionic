@@ -4,35 +4,25 @@ body,
   scroll-behavior: smooth;
 }
 
-/* global.css o similar */
 .input-item {
   --background: white;
-  /* Fondo blanco para el ítem */
   --color: black;
-  /* Texto negro */
   --placeholder-color: grey;
-  /* Color del placeholder */
   --placeholder-opacity: 1;
-  /* Opacidad del placeholder */
-
 }
 
 .input-label {
   --color: black;
-  /* Texto negro */
 }
 
 .header-md {
   box-shadow: none !important;
 }
 
-/* global.css */
 ion-item {
   --inner-border-width: 0 !important;
   --padding-start: 8px;
-  /* Sin padding al inicio */
   --padding-end: 8px;
-  /* Sin padding al final */
   --inner-padding-top: 0;
   --inner-padding-bottom: 0;
   --inner-padding-start: 0;
@@ -43,7 +33,6 @@ ion-item {
 
 }
 
-/* global.css o similar */
 .button-red {
   --background: #ff3b30;
   background-color: #ff3b30 !important;
@@ -76,8 +65,7 @@ ion-item {
   --margin: 0
 }
 
-
-.gray-icon{
+.gray-icon {
   color: #a8a4a4;
 }
 
@@ -87,7 +75,6 @@ ion-item {
 }
 
 
-/* Login.css */
 .login-background {
   display: flex;
   justify-content: center;
@@ -112,12 +99,11 @@ ion-item {
   height: auto;
 }
 
-.color-usuario{
+.color-usuario {
   background-color: #9BC050;
 }
 
-/* user-panel.css */
 .page-color {
-  --padding : 0;
-  --background: #F3F3F3; /* Establece el color de fondo para el contenido de la página */
+  --padding: 0;
+  --background: #F3F3F3;
 }

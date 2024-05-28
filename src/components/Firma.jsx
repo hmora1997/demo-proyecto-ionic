@@ -1,17 +1,13 @@
 import { useState, useRef } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import SignatureCanvas from "react-signature-canvas";
 import { SwatchesPicker } from "react-color";
 import "./Firma.css"; // Importa los estilos CSS para el modal
-import {
-  brushOutline,
-  closeOutline,
-  returnUpBackOutline,
-} from "ionicons/icons";
+import { brushOutline } from "ionicons/icons";
 import { IonButton, IonIcon } from "@ionic/react";
-import arrayFirmas from "../services/globalArrays";
+import { arrayFirmas, arrayFirmasSupervisor } from "../services/globalArrays";
 
-const Firma = ({ position = {}, onClose, onSave, onDelete }) => {
+const Firma = ({ title, position = {}, onClose, onSave, isSupervisor = false }) => {
   const canvasRef = useRef(null);
   const [brushColor, setBrushColor] = useState("#000000");
   const [brushSize, setBrushSize] = useState(5);
@@ -23,15 +19,20 @@ const Firma = ({ position = {}, onClose, onSave, onDelete }) => {
 
   const saveDrawing = () => {
     const canvasImage = canvasRef.current.getTrimmedCanvas().toDataURL();
-    arrayFirmas[position] = canvasImage;
-    console.log('Firma guardada:', arrayFirmas);
+    if (isSupervisor) {
+      arrayFirmasSupervisor[0] = canvasImage;
+      console.log('Firma del supervisor guardada:', arrayFirmasSupervisor);
+    } else {
+      arrayFirmas[position] = canvasImage;
+      console.log('Firma guardada:', arrayFirmas);
+    }
     onSave(canvasImage);
   };
 
   return (
     <Modal show={true} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Firma Trabajador</Modal.Title>
+        <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="canvas-options">
@@ -78,7 +79,6 @@ const Firma = ({ position = {}, onClose, onSave, onDelete }) => {
               >
                 GUARDAR FIRMA
               </IonButton>
-           
             </div>
           </div>
         </div>

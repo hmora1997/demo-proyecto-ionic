@@ -1,3 +1,2 @@
-const arrayFirmas = Array(20).fill("");
-
-export default arrayFirmas; 
+export const arrayFirmas = Array(20).fill("");
+export const arrayFirmasSupervisor = [""];
