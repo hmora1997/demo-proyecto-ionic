@@ -7,7 +7,7 @@ export const enviarSolicitudes = async (
   motivo,
   idBodega,
   idUsuario,
-  deviceId = "unknown_device_id",
+  deviceId,
   location,
   firmas,
   firmaSupervisor

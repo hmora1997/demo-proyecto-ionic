@@ -21,8 +21,7 @@ import { getDeviceInfo } from "../utils/androidId";
 import { getCurrentLocation } from "../utils/geolocalizacion";
 import { enviarSolicitudes } from "../services/insert";
 import { useAuth } from "../AuthContext";
-import Firma from "./Firma"; // Importa el componente de firma del supervisor
-import { arrayFirmas, arrayFirmasSupervisor } from "../services/globalArrays"; // Importa ambos arrays
+import Firma from "./Firma";
 
 const EppInsumos = () => {
   const [cargos, setCargos] = useState([]);
@@ -37,6 +36,7 @@ const EppInsumos = () => {
   const [bodegaSeleccionada, setBodegaSeleccionada] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [showSupervisorModal, setShowSupervisorModal] = useState(false);
+  const [firmaSupervisor, setFirmaSupervisor] = useState(""); // Estado para la firma del supervisor
   const { userData } = useAuth();
 
   useEffect(() => {
@@ -101,7 +101,7 @@ const EppInsumos = () => {
       setBodegaSeleccionada("");
       setCargoSeleccionado("");
       setMotivo("");
-      arrayFirmasSupervisor[0] = "";
+      setFirmaSupervisor("");
     }
 
     setTimeout(() => {
@@ -131,7 +131,7 @@ const EppInsumos = () => {
     }
 
     console.log('Firmas antes de enviar:', firmas);
-    console.log('Firma del supervisor antes de enviar:', arrayFirmasSupervisor[0]);
+    console.log('Firma del supervisor antes de enviar:', firmaSupervisor);
 
     try {
       await enviarSolicitudes(
@@ -143,7 +143,7 @@ const EppInsumos = () => {
         uuid,
         location,
         firmas,
-        arrayFirmasSupervisor[0]
+        firmaSupervisor
       );
 
       setTimeout(() => {
@@ -169,7 +169,7 @@ const EppInsumos = () => {
   };
 
   const handleSaveSupervisorFirma = (firma) => {
-    arrayFirmasSupervisor[0] = firma;
+    setFirmaSupervisor(firma); // Guardar la firma del supervisor en el estado
     setShowSupervisorModal(false);
     setShowModal(true);
     setModalStage(0);

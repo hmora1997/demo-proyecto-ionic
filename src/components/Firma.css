@@ -29,3 +29,9 @@
 	left: 0;
 	z-index: 1000;
 }
+
+.error-message-firma{
+	
+	background-color: #eb445a;
+	color: white;
+}
