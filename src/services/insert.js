@@ -45,9 +45,9 @@ export const enviarSolicitudes = async (
       formData.append('sol_motivo', motivo);
       formData.append('sol_bod_id', idBodega);
       formData.append('sol_tra_firma', firmaTrabajador);
-      formData.append('sol_supervisor_firma', firmaSupervisor); // Añade la firma del supervisor
+      formData.append('sol_supervisor_firma', firmaSupervisor);
 
-      console.log('FormData:', Object.fromEntries(formData.entries())); // Verifica el contenido de FormData
+      console.log('FormData:', Object.fromEntries(formData.entries()));
 
       axios.post(url, formData, {
         headers: {
