@@ -20,7 +20,7 @@ const AppVersionComponent = () => {
 
   return (
     <div>
-      <p>Versión: {versionNumber}</p>
+      <span>Versión: {versionNumber}</span>
     </div>
   );
 };
