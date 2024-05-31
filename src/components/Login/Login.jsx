@@ -15,6 +15,7 @@ import Logo from "../Logo";
 import { useAuth } from "../../AuthContext";
 import { login as loginService } from "../../services/login";
 import { useHistory } from "react-router-dom";
+import Version from "../Version";
 
 const Login = () => {
   const usernameRef = useRef("");
@@ -161,6 +162,9 @@ return (
                   {loading ? <IonSpinner name="crescent" /> : "Ingresar"}
                 </IonButton>
               </form>
+              <div className="text-center">
+              <Version></Version>
+              </div>
             </div>
           </div>
         </div>

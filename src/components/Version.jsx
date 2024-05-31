@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { App } from '@capacitor/app';
+import './version.css';
 
 const AppVersionComponent = () => {
   const [versionNumber, setVersionNumber] = useState('');
@@ -20,7 +21,7 @@ const AppVersionComponent = () => {
 
   return (
     <div>
-      <span>Versión: {versionNumber}</span>
+      <span className="texto-version" >V{versionNumber}</span>
     </div>
   );
 };
