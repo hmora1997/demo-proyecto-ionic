@@ -1,0 +1,25 @@
+ion-card {
+    margin-inline-start: 0 !important;
+    margin-inline-end: 0 !important;
+  }
+
+  .button-blue-recibo {
+    --background: #2844d4;
+    --border-radius: .25rem;
+    --color: white;
+    --padding-top: .75rem;
+    --padding-bottom: .75rem;
+
+  }
+  .button-blue-border {
+    --background: white;
+    --border-color: #2844d4;      /* Especificar el color del borde */
+    --border-style: solid;        /* Estilo del borde */
+    --border-width: 2px;          /* Ancho del borde */
+    --border-radius: 0;
+    --color: black;
+    --padding-top: 0.75rem;
+    --padding-bottom: 0.75rem;
+  }
+  
+  

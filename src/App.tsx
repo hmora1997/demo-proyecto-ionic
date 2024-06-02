@@ -68,12 +68,8 @@ const App: React.FC = () => {
               </Route>
               <ProtectedRoute exact path="/home" component={HomePage} />
               <ProtectedRoute exact path="/menu" component={MenuPrincipalPage} />
-              <ProtectedRoute exact path="/consulta" component={ConsultaPage} />
-              <ProtectedRoute
-                exact
-                path="/entrega-epp-insumos"
-                component={InsumosPage}
-              />
+              <ProtectedRoute exact path="/consulta/:tipo" component={ConsultaPage} />
+              <ProtectedRoute exact path="/entrega-epp-insumos" component={InsumosPage} />
             </Suspense>
           </IonRouterOutlet>
         </IonReactRouter>

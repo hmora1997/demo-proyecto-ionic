@@ -228,7 +228,7 @@ const EppInsumos = () => {
         isSubmitting={modalStage === 1}
       />
       <IonContent className="page-color">
-        <UsuarioActual usuario="admin@admin.cl" />
+        <UsuarioActual />
         <div className="container-fluid px-4 mt-4">
           <h2 className="mb-3">Entregar EPP o Insumos</h2>
           <IonLabel className="text-dark" position="stacked">

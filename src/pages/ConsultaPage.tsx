@@ -7,7 +7,7 @@ import Header from "../components/Header";
 const ConsultaPage: React.FC = () => {
   return (
     <IonPage>
-      <Header showBackButton={true} />
+      <Header showBackButton={true}  />
       <IonContent fullscreen>
         <MenuConsulta />
       </IonContent>
