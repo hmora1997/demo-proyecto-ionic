@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import {
-  IonContent, IonSelect, IonSelectOption, IonItem, IonLabel, IonButton, IonLoading, IonRefresher, IonRefresherContent
+  IonContent, IonSelect, IonSelectOption, IonItem, IonLabel, IonButton, IonLoading, IonRefresher, IonRefresherContent,
+  IonToast
 } from '@ionic/react';
 import { realizarConsulta } from '../services/consulta';
 import { obtenerInsumos } from '../services/insumos';
@@ -24,6 +25,8 @@ const MenuConsulta = () => {
   const [error, setError] = useState(null);
   const [selectedEPP, setSelectedEPP] = useState('');
   const [selectedRUT, setSelectedRUT] = useState('');
+  const [toastMessage, setToastMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
 
@@ -52,9 +55,13 @@ const MenuConsulta = () => {
     }
   };
 
-
-
   const handleBuscar = async () => {
+    if (!selectedEPP && !selectedRUT) {
+      setToastMessage('Debe seleccionar al menos un criterio de búsqueda (EPP o RUT Trabajador).');
+      setShowToast(true);
+      return;
+    }
+
     setIsLoading(true);
     try {
       const queryParams = {
@@ -68,10 +75,14 @@ const MenuConsulta = () => {
       } else {
         setData([]);
         setError('No se encontraron datos para los criterios seleccionados.');
+        setToastMessage('No se encontraron datos para los criterios seleccionados.');
+        setShowToast(true);
       }
     } catch (err) {
       console.error('Error en la consulta:', err);
       setError(err.toString());
+      setToastMessage(err.toString());
+      setShowToast(true);
     }
     setIsLoading(false);
   };
@@ -102,6 +113,14 @@ const MenuConsulta = () => {
 
   return (
     <IonContent className="page-color">
+      <IonToast
+        isOpen={showToast}
+        onDidDismiss={() => setShowToast(false)}
+        message={toastMessage}
+        color={'danger'}
+        duration={2000}
+        position="top"
+      />
       <UsuarioActual />
       <IonLoading isOpen={isLoading} message={'Cargando...'} spinner="crescent" />
       <IonRefresher slot="fixed" onIonRefresh={doRefresh}>
