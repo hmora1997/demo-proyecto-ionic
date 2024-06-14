@@ -99,6 +99,15 @@ const MenuConsulta = () => {
     event.detail.complete();
   };
 
+  const formatTipo = tipo => {
+    return tipo.split('_').map((word, index) => {
+      if (word.toLowerCase() === "epp") {
+        return "EPP";
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }).join(' ');
+  };
+
 
   const renderContent = () => {
     switch (tipo) {
@@ -134,7 +143,7 @@ const MenuConsulta = () => {
       </IonRefresher>
 
       <div className="container-fluid px-4 mt-4">
-        <h2 className="mb-3">Consulta: {tipo.replace('_', ' ')}</h2>
+        <h2 className="mb-3">Consulta: {formatTipo(tipo)}</h2>
         <IonLabel>EPP</IonLabel>
         <IonItem className='input-item mb-2'>
           <IonSelect value={selectedEPP} placeholder="EPP" onIonChange={e => setSelectedEPP(e.detail.value)}>
@@ -143,11 +152,11 @@ const MenuConsulta = () => {
             ))}
           </IonSelect>
         </IonItem>
-        <IonLabel>RUT Trabajador</IonLabel>
+        <IonLabel>Trabajador</IonLabel>
         <IonItem className='input-item mb-2'>
-          <IonSelect value={selectedRUT} placeholder="RUT Trabajador" onIonChange={e => setSelectedRUT(e.detail.value)}>
+          <IonSelect value={selectedRUT} placeholder="Trabajador" onIonChange={e => setSelectedRUT(e.detail.value)}>
             {trabajadores.map((tra, index) => (
-              <IonSelectOption key={index} value={tra.tra_rut}>{tra.tra_nombre_completo}</IonSelectOption>
+              <IonSelectOption key={index} value={tra.tra_rut}>{tra.tra_apellidos_nombre}</IonSelectOption>
             ))}
           </IonSelect>
         </IonItem>

@@ -15,7 +15,7 @@ const EppEntregados = ({ data }) => {
                             <div className="col-8">
                                 <p>Trabajador: <strong>{item.tra_nombre_completo}</strong></p>
                                 <p>RUT: <strong>{item.tra_rut_completo}</strong></p>
-                                <p>Fecha de entrega: <strong>{item.sol_fecha_entrega}</strong></p>
+                                <p>Fecha de entrega: <strong>{item.sol_fecha_entrega_format}</strong></p>
                                 <p>Fecha de vencimiento: <strong>{item.sol_fecha_vencimiento}</strong></p>
                             </div>
                             <div className="col-4 ps-0 d-flex justify-content-center align-items-center">

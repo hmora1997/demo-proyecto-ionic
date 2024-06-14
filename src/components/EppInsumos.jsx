@@ -279,29 +279,31 @@ const EppInsumos = () => {
               />
             </>
           )}
-          {cargoSeleccionado && seleccionados.length > 0 && (
-            <>
-              <strong>Paso 3: Agregar Insumos</strong>
-              <div className="container-fluid px-0">
-                <SelectorInsumos
-                  cargoSeleccionado={cargoSeleccionado}
-                  insumosSeleccionados={insumosSeleccionados}
-                  setInsumosSeleccionados={setInsumosSeleccionados}
+          {
+            cargoSeleccionado && seleccionados.length > 0 && todasFirmasPresentes() && (
+              <>
+                <strong>Paso 3: Agregar Insumos</strong>
+                <div className="container-fluid px-0">
+                  <SelectorInsumos
+                    cargoSeleccionado={cargoSeleccionado}
+                    insumosSeleccionados={insumosSeleccionados}
+                    setInsumosSeleccionados={setInsumosSeleccionados}
+                  />
+                </div>
+                <IonLabel className="text-dark" position="stacked">
+                  Resumen Insumos
+                  <p className="fw-bold text-dark">
+                    Presione un insumo para eliminar
+                  </p>
+                </IonLabel>
+                <InsumosSeleccionados
+                  seleccionados={insumosSeleccionados}
+                  onEliminar={onEliminarInsumo}
+                  onEditar={onEditar}
                 />
-              </div>
-              <IonLabel className="text-dark" position="stacked">
-                Resumen Insumos
-                <p className="fw-bold text-dark">
-                  Presione un insumo para eliminar
-                </p>
-              </IonLabel>
-              <InsumosSeleccionados
-                seleccionados={insumosSeleccionados}
-                onEliminar={onEliminarInsumo}
-                onEditar={onEditar}
-              />
-            </>
-          )}
+              </>
+            )
+          }
           {insumosSeleccionados.length > 0 && (
             <>
               <IonLabel className="text-dark" position="stacked">
