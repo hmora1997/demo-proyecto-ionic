@@ -10,7 +10,7 @@ const EppPendientes = ({ data }) => {
                         <IonCardTitle>{item.epp_nombre}</IonCardTitle>
                     </IonCardHeader>
                     <IonCardContent>
-                        <p>Trabajador: <strong>{item.tra_nombre_completo}</strong></p>
+                        <p>Trabajador: <strong>{item.tra_apellidos_nombre}</strong></p>
                         <p>RUT: <strong>{item.tra_rut_completo}</strong></p>
                         <p>Vida útil (meses): <strong>{item.epp_vida}</strong></p>
                       

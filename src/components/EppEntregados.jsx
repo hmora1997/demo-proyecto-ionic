@@ -13,7 +13,7 @@ const EppEntregados = ({ data }) => {
                     <IonCardContent>
                         <div className="row">
                             <div className="col-8">
-                                <p>Trabajador: <strong>{item.tra_nombre_completo}</strong></p>
+                                <p>Trabajador: <strong>{item.tra_apellidos_nombre}</strong></p>
                                 <p>RUT: <strong>{item.tra_rut_completo}</strong></p>
                                 <p>Fecha de entrega: <strong>{item.sol_fecha_entrega_format}</strong></p>
                                 <p>Fecha de vencimiento: <strong>{item.sol_fecha_vencimiento}</strong></p>
