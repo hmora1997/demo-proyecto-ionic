@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { 
-  IonButton, 
-  IonContent, 
-  IonItem, 
-  IonList, 
-  IonPopover, 
-  IonToast, 
-  IonHeader, 
-  IonToolbar, 
-  IonTitle 
+import {
+  IonContent,
+  IonActionSheet,
+  IonToast,
 } from "@ionic/react";
+import { chevronForwardOutline, closeOutline } from 'ionicons/icons';
 import BotonNavegacion from "./BotonNavegacion";
 import UsuarioActual from "./UsuarioActual";
 import "./menu-home.css";
@@ -20,7 +15,55 @@ const MenuHome = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastColor, setToastColor] = useState("danger");
-  const [showPopover, setShowPopover] = useState(false);
+  const [showActionSheet, setShowActionSheet] = useState(false);
+
+  const actionSheetButtons = [
+    {
+      text: 'EPP entregados',
+      handler: () => {
+        history.push('/consulta/epp_entregado');
+      },
+      icon: chevronForwardOutline,
+      iconSlot: 'end'
+    },
+    {
+      text: 'Trabajadores con Insumos Pendientes',
+      handler: () => {
+        history.push('/consulta/epp_pendientes');
+      },
+      icon: chevronForwardOutline,
+      iconSlot: 'end'
+    },
+    // {
+    //   text: 'Trabajadores con Insumos Vencidos',
+    //   handler: () => {
+    //     history.push('/consulta/epp_vencidos');
+    //   },
+    //   icon: chevronForwardOutline,
+    //   iconSlot: 'end'
+    // },
+    // {
+    //   text: 'Insumos Vencidos para el Trabajador',
+    //   handler: () => {
+    //     history.push('/consulta/insumos_vencidos');
+    //   },
+    //   icon: chevronForwardOutline,
+    //   iconSlot: 'end'
+    // },
+    // {
+    //   text: 'Insumos Pendientes para el Trabajador',
+    //   handler: () => {
+    //     history.push('/consulta/insumos_pendientes');
+    //   },
+    //   icon: chevronForwardOutline,
+    //   iconSlot: 'end'
+    // },
+    {
+      text: 'Cancelar',
+      role: 'cancel',
+      icon: closeOutline,
+    }
+  ];
 
   return (
     <IonContent className="page-color">
@@ -33,42 +76,23 @@ const MenuHome = () => {
         />
         <BotonNavegacion
           texto="Consulta en Línea"
-          onClick={() => setShowPopover(true)} 
+          onClick={() => setShowActionSheet(true)}
           expand="block"
         />
-        <IonPopover
-          className="custom-popover"
-          isOpen={showPopover}
-          onDidDismiss={() => setShowPopover(false)}
-        >
-          <IonHeader>
-            <IonToolbar>
-              <IonTitle>Selecciona una Consulta</IonTitle>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent>
-
-              <IonItem  button={true} detail={false} onClick={() => history.push('/consulta/epp_entregado')}>
-                EPP entregados
-              </IonItem>
-              <IonItem button={true} detail={false} onClick={() => history.push('/consulta/epp_pendientes')}>
-                Trabajadores con Insumos Pendientes
-              </IonItem>
-              {/* Considera descomentar y usar los siguientes IonItem según necesites */}
-              {/* <IonItem button={true} detail={false} onClick={() => history.push('/consulta/epp_vencidos')}>
-                Trabajadores con Insumos Vencidos
-              </IonItem>
-              <IonItem button={true} detail={false} onClick={() => history.push('/consulta/')}>
-                Insumos Vencidos para el Trabajador
-              </IonItem>
-              <IonItem button={true} detail={false} onClick={() => history.push('/consulta/')}>
-                Insumos Pendientes para el Trabajador
-              </IonItem> */}
-
-          </IonContent>
-        </IonPopover>
+        <IonActionSheet
+          isOpen={showActionSheet}
+          onDidDismiss={() => setShowActionSheet(false)}
+          header="Selecciona una Consulta"
+          buttons={actionSheetButtons}
+        />
+        <IonToast
+          isOpen={showToast}
+          onDidDismiss={() => setShowToast(false)}
+          message={toastMessage}
+          color={toastColor}
+          duration={2000}
+        />
       </div>
-
     </IonContent>
   );
 };

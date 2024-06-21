@@ -1,32 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { obtenerCargos } from "../services/cargos";
-import { obtenerBodegas } from "../services/bodegas";
+import { obtenerBodegas } from "../../services/bodegas";
 import SelectorTrabajadores from "./SelectorTrabajadores";
 import TrabajadoresSeleccionados from "./TrabajadoresSeleccionados";
 import SelectorInsumos from "./SelectorInsumos";
 import InsumosSeleccionados from "./InsumosSeleccionados";
+import SelectorCargos from "./SelectorCargos"; // Asegúrate de tener esta importación
 import {
   IonContent,
   IonLabel,
   IonItem,
+  IonToast,
+  IonInput,
   IonButton,
   IonSelect,
   IonSelectOption,
-  IonToast,
+  IonModal
 } from "@ionic/react";
 import "./epp-insumos.css";
-import CustomModal from "./CustomModal";
-import UsuarioActual from "./UsuarioActual";
-import { getDeviceInfo } from "../utils/androidId";
-import { getCurrentLocation } from "../utils/geolocalizacion";
-import { enviarSolicitudes } from "../services/insert";
-import { useAuth } from "../AuthContext";
-import Firma from "./Firma";
+import CustomModal from "../CustomModal";
+import UsuarioActual from "../UsuarioActual";
+import { getDeviceInfo } from "../../utils/androidId";
+import { getCurrentLocation } from "../../utils/geolocalizacion";
+import { enviarSolicitudes } from "../../services/insert";
+import { useAuth } from "../../AuthContext";
+import Firma from "../Firma";
 
 const EppInsumos = () => {
-  const [cargos, setCargos] = useState([]);
   const [bodegas, setBodegas] = useState([]);
-  const [cargoSeleccionado, setCargoSeleccionado] = useState("");
+  const [cargoSeleccionado, setCargoSeleccionado] = useState(null);
   const [seleccionados, setSeleccionados] = useState([]);
   const [insumosSeleccionados, setInsumosSeleccionados] = useState([]);
   const [firmas, setFirmas] = useState({});
@@ -37,18 +38,10 @@ const EppInsumos = () => {
   const [showToast, setShowToast] = useState(false);
   const [showSupervisorModal, setShowSupervisorModal] = useState(false);
   const [firmaSupervisor, setFirmaSupervisor] = useState(""); // Estado para la firma del supervisor
+  const [mostrarModalCargos, setMostrarModalCargos] = useState(false); // Estado para mostrar el modal de cargos
   const { userData } = useAuth();
 
   useEffect(() => {
-    const cargarCargos = async () => {
-      try {
-        const cargosObtenidos = await obtenerCargos();
-        setCargos(cargosObtenidos);
-      } catch (error) {
-        console.error("No se pudieron cargar los cargos:", error);
-      }
-    };
-
     const cargarBodegas = async () => {
       try {
         const bodegasObtenidas = await obtenerBodegas();
@@ -58,7 +51,6 @@ const EppInsumos = () => {
       }
     };
 
-    cargarCargos();
     cargarBodegas();
   }, []);
 
@@ -99,7 +91,7 @@ const EppInsumos = () => {
       setInsumosSeleccionados([]);
       setFirmas({});
       setBodegaSeleccionada("");
-      setCargoSeleccionado("");
+      setCargoSeleccionado(null);
       setMotivo("");
       setFirmaSupervisor("");
     }
@@ -175,6 +167,16 @@ const EppInsumos = () => {
     setModalStage(0);
   };
 
+  const handleCargoSeleccionado = (cargo) => {
+    setCargoSeleccionado(cargo);
+    setSeleccionados([]);
+    setInsumosSeleccionados([]);
+    setFirmas({});
+    setBodegaSeleccionada("");
+    setMotivo("");
+    setMostrarModalCargos(false);
+  };
+
   let title, message, buttons;
   switch (modalStage) {
     case 0:
@@ -232,34 +234,21 @@ const EppInsumos = () => {
         <div className="container-fluid px-4 mt-4">
           <h2 className="mb-3">Entregar EPP o Insumos</h2>
           <IonLabel className="text-dark" position="stacked">
-            <strong>Paso 1: Seleccione cargo</strong>
+            <strong>Paso 1: Selecciona cargo</strong>
           </IonLabel>
-          <IonItem className="input-item mb-2">
-            <IonSelect
-              value={cargoSeleccionado}
-              onIonChange={(e) => {
-                setCargoSeleccionado(e.detail.value);
-                setSeleccionados([]);
-                setInsumosSeleccionados([]);
-                setFirmas({});
-                setBodegaSeleccionada("");
-                setMotivo("");
-              }}
+          <IonItem className="input-item mb-2" onClick={() => setMostrarModalCargos(true)}>
+            <IonInput
+              value={cargoSeleccionado ? cargoSeleccionado.car_nombre : ""}
               placeholder="Seleccionar Cargo"
-            >
-              {cargos.map((cargo) => (
-                <IonSelectOption key={cargo.car_id} value={cargo.car_id}>
-                  {cargo.car_nombre}
-                </IonSelectOption>
-              ))}
-            </IonSelect>
+              readonly
+            />
           </IonItem>
           {cargoSeleccionado && (
             <>
               <strong>Paso 2: Agregar Trabajador</strong>
               <div className="container-fluid px-0">
                 <SelectorTrabajadores
-                  cargoSeleccionado={cargoSeleccionado}
+                  cargoSeleccionado={cargoSeleccionado.car_id}
                   seleccionados={seleccionados}
                   setSeleccionados={setSeleccionados}
                 />
@@ -285,7 +274,7 @@ const EppInsumos = () => {
                 <strong>Paso 3: Agregar Insumos</strong>
                 <div className="container-fluid px-0">
                   <SelectorInsumos
-                    cargoSeleccionado={cargoSeleccionado}
+                    cargoSeleccionado={cargoSeleccionado.car_id}
                     insumosSeleccionados={insumosSeleccionados}
                     setInsumosSeleccionados={setInsumosSeleccionados}
                   />
@@ -335,7 +324,7 @@ const EppInsumos = () => {
                 <IonSelect
                   value={bodegaSeleccionada}
                   onIonChange={(e) => setBodegaSeleccionada(e.detail.value)}
-                  placeholder="Seleccionar Bodega"
+                  placeholder="Selecciona Bodega"
                 >
                   {bodegas.map((bodega) => (
                     <IonSelectOption key={bodega.bod_id} value={bodega.bod_id}>
@@ -375,6 +364,16 @@ const EppInsumos = () => {
           isSupervisor={true}
         />
       )}
+      <IonModal
+        isOpen={mostrarModalCargos}
+        onDidDismiss={() => setMostrarModalCargos(false)}
+      >
+        <SelectorCargos
+          seleccionados={cargoSeleccionado ? [cargoSeleccionado] : []}
+          setSeleccionados={(cargos) => handleCargoSeleccionado(cargos[0])}
+          onClose={() => setMostrarModalCargos(false)}
+        />
+      </IonModal>
     </>
   );
 };

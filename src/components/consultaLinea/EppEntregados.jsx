@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton } from '@ionic/react';
-import { obtenerReciboUrl } from '../services/consulta';
+import { obtenerReciboUrl } from '../../services/consulta';
 
 const EppEntregados = ({ data }) => {
     return (

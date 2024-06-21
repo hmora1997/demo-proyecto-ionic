@@ -7,14 +7,18 @@ import {
   IonHeader,
   IonIcon,
   IonContent,
+  IonSearchbar,
+  IonLoading,
 } from '@ionic/react';
-import { obtenerTrabajadoresPorCarId } from '../services/trabajadores'; // Asegúrate de tener esta importación
+import { obtenerTrabajadoresPorCarId } from '../../services/trabajadores';
 import { close } from 'ionicons/icons';
 
 const SelectorTrabajadores = ({ cargoSeleccionado, seleccionados, setSeleccionados }) => {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [trabajadores, setTrabajadores] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [temporalSeleccionados, setTemporalSeleccionados] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     const cargarTrabajadores = async () => {
@@ -33,7 +37,7 @@ const SelectorTrabajadores = ({ cargoSeleccionado, seleccionados, setSeleccionad
 
   useEffect(() => {
     setTemporalSeleccionados(seleccionados);
-  }, [mostrarModal]);
+  }, [mostrarModal, seleccionados]);
 
   const toggleSeleccion = (trabajador) => {
     const estaSeleccionado = temporalSeleccionados.some(
@@ -53,15 +57,25 @@ const SelectorTrabajadores = ({ cargoSeleccionado, seleccionados, setSeleccionad
     setMostrarModal(false);
   };
 
+  const handleSearch = (ev) => {
+    const query = ev.target.value.toLowerCase();
+    setSearchText(query);
+  };
+
+  const trabajadoresFiltrados = trabajadores.filter((trabajador) =>
+    trabajador.tra_apellidos_nombre.toLowerCase().includes(searchText) ||
+    trabajador.tra_rut_completo.toLowerCase().includes(searchText)
+  );
+
   return (
     <>
       <IonButton onClick={() => setMostrarModal(true)} className="w-100 mx-0 mb-4 fw-bold button-blue">Seleccionar Trabajadores</IonButton>
-
       <IonModal
         isOpen={mostrarModal}
         onDidDismiss={() => setMostrarModal(false)}
       >
-        <IonHeader className="d-flex justify-content-end align-items-center">
+        <IonHeader className="d-flex justify-content-between align-items-center px-2">
+          <h5 className="ms-1 mt-0 mb-0 me-0">Selecciona Trabajadores</h5>
           <IonButton
             className="fw-bold button-blue"
             fill="clear"
@@ -70,9 +84,24 @@ const SelectorTrabajadores = ({ cargoSeleccionado, seleccionados, setSeleccionad
             <IonIcon icon={close} />
           </IonButton>
         </IonHeader>
+        <div className="container-fluid mb-2">
+          <IonSearchbar
+            value={searchText}
+            animated={true}
+            onIonInput={handleSearch}
+            debounce={300}
+            placeholder="Buscar por nombre de trabajador"
+            className="px-0 mx-0"
+          />
+        </div>
+        <IonLoading isOpen={isLoading} message="Cargando trabajadores..." />
         <IonContent>
-          <div className="list-group">
-            {trabajadores.map((trabajador, index) => (
+          {trabajadoresFiltrados.length === 0 ? (
+            <div className="text-center mt-3">
+              <p>No se encontraron resultados.</p>
+            </div>
+          ) : (<div className="list-group">
+            {trabajadoresFiltrados.map((trabajador, index) => (
               <label
                 key={index}
                 className="list-group-item d-flex position-relative align-items-center"
@@ -96,7 +125,9 @@ const SelectorTrabajadores = ({ cargoSeleccionado, seleccionados, setSeleccionad
                 </div>
               </label>
             ))}
-          </div>
+          </div>)
+          }
+
         </IonContent>
         <IonFooter>
           <IonButton

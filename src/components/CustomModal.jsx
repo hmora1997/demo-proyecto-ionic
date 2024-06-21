@@ -1,11 +1,10 @@
 import React from "react";
 import { IonModal, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonSpinner } from "@ionic/react";
-import "./custom-modal.css"; // Asegura que este archivo contenga tus estilos personalizados
+import "./custom-modal.css";
 
 const CustomModal = ({ isOpen, title, message, buttons, onClose, isSubmitting }) => {
   return (
     <IonModal isOpen={isOpen} onDidDismiss={onClose} cssClass="custom-modal" backdropDismiss={false}>
-      {/* Encabezado del Modal */}
       <IonHeader>
         <IonToolbar>
           <IonTitle>{title}</IonTitle>
@@ -20,7 +19,6 @@ const CustomModal = ({ isOpen, title, message, buttons, onClose, isSubmitting })
           className="modal-buttons-container d-flex justify-content-evenly"
           style={{ width: "100%" }}
         >
-          {/* Condición para mostrar botones o spinner */}
           {isSubmitting ? (
             <IonSpinner name="crescent" style={{ alignSelf: "center" }} />
           ) : (
@@ -38,8 +36,6 @@ const CustomModal = ({ isOpen, title, message, buttons, onClose, isSubmitting })
           )}
         </div>
       </IonContent>
-
-      {/* Pie de página del Modal */}
     </IonModal>
   );
 };

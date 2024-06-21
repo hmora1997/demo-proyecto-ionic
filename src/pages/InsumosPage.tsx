@@ -1,7 +1,7 @@
 import React from "react";
 import { IonContent, IonPage } from "@ionic/react";
 import "./Home.css";
-import EppInsumos from "../components/EppInsumos";
+import EppInsumos from "../components/InsertarInsumos/EppInsumos";
 import Header from "../components/Header";
 
 const InsumosPage: React.FC = () => {

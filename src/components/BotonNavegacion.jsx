@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { IonButton } from "@ionic/react";
 
 const BotonNavegacion = ({ texto, ruta, colorButton, disabled, onClick }) => {
   if (!colorButton) colorButton = "button-blue mx-0";
@@ -16,13 +17,14 @@ const BotonNavegacion = ({ texto, ruta, colorButton, disabled, onClick }) => {
   };
 
   return (
-    <button
-      className={`btn w-100 text-white px-0 mb-3 fw-bold ${colorButton} rounded-0 ${disabled ? 'disabled' : ''}`}
+    <IonButton
+      
       onClick={handleOnClick}
+      className={`w-100 mx-0 mb-4 fw-bold ${colorButton}`}
       disabled={disabled}
     >
       {texto}
-    </button>
+    </IonButton>
   );
 };
 

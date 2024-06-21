@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
-  IonContent, IonSelect, IonSelectOption, IonItem, IonLabel, IonButton, IonLoading, IonRefresher, IonRefresherContent,
-  IonToast
+  IonContent, IonItem, IonLabel, IonButton, IonLoading, IonRefresher, IonRefresherContent,
+  IonToast, IonInput,
 } from '@ionic/react';
 import { realizarConsulta } from '../services/consulta';
 import { obtenerInsumos } from '../services/insumos';
 import { obtenerTrabajadores } from '../services/trabajadores';
 import UsuarioActual from './UsuarioActual';
-import EppEntregados from './EppEntregados';
-import EppPendientes from './EppPendientes';
+import EppEntregados from './consultaLinea/EppEntregados';
+import EppPendientes from './consultaLinea/EppPendientes';
+import SelectorModal from './consultaLinea/SelectorModal';
 import './menu-consulta.css';
+
 import { IonIcon } from '@ionic/react';
 import { closeCircleOutline, closeOutline } from 'ionicons/icons';
 
-
 const MenuConsulta = () => {
   const { tipo } = useParams();
-  const location = useLocation();
   const [data, setData] = useState([]);
   const [insumos, setInsumos] = useState([]);
   const [trabajadores, setTrabajadores] = useState([]);
@@ -27,9 +27,10 @@ const MenuConsulta = () => {
   const [selectedRUT, setSelectedRUT] = useState('');
   const [toastMessage, setToastMessage] = useState('');
   const [showToast, setShowToast] = useState(false);
+  const [showModalEPP, setShowModalEPP] = useState(false);
+  const [showModalTrabajador, setShowModalTrabajador] = useState(false);
 
   useEffect(() => {
-
     fetchSelectores();
   }, []);
 
@@ -57,7 +58,7 @@ const MenuConsulta = () => {
 
   const handleBuscar = async () => {
     if (!selectedEPP && !selectedRUT) {
-      setToastMessage('Debe seleccionar al menos un criterio de búsqueda (EPP o RUT Trabajador).');
+      setToastMessage('Debes seleccionar al menos un criterio de búsqueda (EPP o RUT Trabajador).');
       setShowToast(true);
       return;
     }
@@ -90,7 +91,6 @@ const MenuConsulta = () => {
   const resetFilters = () => {
     setSelectedEPP('');
     setSelectedRUT('');
-
   };
 
   const doRefresh = async (event) => {
@@ -107,7 +107,6 @@ const MenuConsulta = () => {
       return word.charAt(0).toUpperCase() + word.slice(1);
     }).join(' ');
   };
-
 
   const renderContent = () => {
     switch (tipo) {
@@ -145,28 +144,46 @@ const MenuConsulta = () => {
       <div className="container-fluid px-4 mt-4">
         <h2 className="mb-3">Consulta: {formatTipo(tipo)}</h2>
         <IonLabel>EPP</IonLabel>
-        <IonItem className='input-item mb-2'>
-          <IonSelect value={selectedEPP} placeholder="EPP" onIonChange={e => setSelectedEPP(e.detail.value)}>
-            {insumos.map((epp, index) => (
-              <IonSelectOption key={index} value={epp.epp_id}>{epp.epp_nombre}</IonSelectOption>
-            ))}
-          </IonSelect>
+        <IonItem className='input-item mb-2' onClick={() => setShowModalEPP(true)}>
+          <IonInput
+            value={insumos.find(insumo => insumo.epp_id === selectedEPP)?.epp_nombre || 'Seleccionar EPP'}
+            placeholder="Seleccionar EPP"
+            readonly
+          />
         </IonItem>
+        <SelectorModal
+          isOpen={showModalEPP}
+          onClose={() => setShowModalEPP(false)}
+          title="Selecciona un EPP"
+          items={insumos.map(insumo => ({ id: insumo.epp_id, name: insumo.epp_nombre }))}
+          selectedItem={selectedEPP}
+          setSelectedItem={setSelectedEPP}
+          searchPlaceholder="Buscar por nombre de EPP"
+        />
         <IonLabel>Trabajador</IonLabel>
-        <IonItem className='input-item mb-2'>
-          <IonSelect value={selectedRUT} placeholder="Trabajador" onIonChange={e => setSelectedRUT(e.detail.value)}>
-            {trabajadores.map((tra, index) => (
-              <IonSelectOption key={index} value={tra.tra_rut}>{tra.tra_apellidos_nombre}</IonSelectOption>
-            ))}
-          </IonSelect>
+        <IonItem className='input-item mb-2' onClick={() => setShowModalTrabajador(true)}>
+          <IonInput
+            value={trabajadores.find(trabajador => trabajador.tra_rut === selectedRUT)?.tra_apellidos_nombre || 'Seleccionar Trabajador'}
+            placeholder="Seleccionar Trabajador"
+            readonly
+          />
         </IonItem>
+        <SelectorModal
+          isOpen={showModalTrabajador}
+          onClose={() => setShowModalTrabajador(false)}
+          title="Selecciona un Trabajador"
+          items={trabajadores.map(trabajador => ({ id: trabajador.tra_rut, name: trabajador.tra_apellidos_nombre }))}
+          selectedItem={selectedRUT}
+          setSelectedItem={setSelectedRUT}
+          searchPlaceholder="Buscar por nombre de trabajador"
+        />
 
         <div className="container-fluid">
           <div className="row px-0">
-            <div className="col-9  px-0">
+            <div className="col-9 px-0">
               <IonButton expand="block" className="custom-button h-75 mx-0 button-blue" onClick={handleBuscar}>Buscar</IonButton>
             </div>
-            <div className="col-3  px-0">
+            <div className="col-3 px-0">
               <IonButton expand="block" className="custom-button h-75 me-0 button-blue-border" onClick={resetFilters}>
                 <IonIcon icon={closeOutline} />
               </IonButton>
@@ -177,7 +194,6 @@ const MenuConsulta = () => {
       </div>
     </IonContent>
   );
-
 };
 
 export default MenuConsulta;

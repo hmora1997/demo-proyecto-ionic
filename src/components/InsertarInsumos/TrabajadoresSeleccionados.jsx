@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { IonActionSheet, IonIcon } from "@ionic/react";
 import { trash, close, pencil } from "ionicons/icons";
-import Firma from "./Firma"; // Importa el componente de Firma
+import Firma from "../Firma";
 
 const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados, firmas, setFirmas }) => {
   const [showActionSheet, setShowActionSheet] = useState(false);
-  const [showModal, setShowModal] = useState(false); // Agrega estado para controlar la apertura del modal
+  const [showModal, setShowModal] = useState(false);
   const [trabajadorSeleccionado, setTrabajadorSeleccionado] = useState(null);
   const [indexSeleccionado, setIndexSeleccionado] = useState(null);
 
@@ -19,7 +19,7 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados
     const updatedFirmas = { ...firmas, [trabajadorSeleccionado.tra_id]: firma };
     setFirmas(updatedFirmas);
     console.log('Firma guardada:', updatedFirmas);
-    setShowModal(false); // Cierra el modal Firma
+    setShowModal(false);
   };
 
   const handleDeleteFirma = () => {
@@ -27,7 +27,7 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados
     delete updatedFirmas[trabajadorSeleccionado.tra_id];
     console.log('Firma eliminada:', updatedFirmas);
     setFirmas(updatedFirmas);
-    setShowModal(false); // Cierra el modal Firma
+    setShowModal(false);
   };
 
   const handleEliminar = (trabajadorId) => {
@@ -37,7 +37,7 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados
     delete updatedFirmas[trabajadorId];
     console.log('Firma eliminada:', updatedFirmas);
     setFirmas(updatedFirmas);
-    setShowActionSheet(false); // Cierra el IonActionSheet
+    setShowActionSheet(false);
   };
 
   return (
@@ -92,8 +92,8 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados
             role: "selected",
             icon: pencil,
             handler: () => {
-              setShowActionSheet(false); 
-              setShowModal(true); 
+              setShowActionSheet(false);
+              setShowModal(true);
             },
           },
           {
@@ -109,7 +109,7 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados
             role: "cancel",
             icon: close,
             handler: () => {
-              setShowActionSheet(false); 
+              setShowActionSheet(false);
             },
           },
         ]}
@@ -117,7 +117,7 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados
       {showModal && (
         <Firma
           title={`Firma Trabajador ${trabajadorSeleccionado.tra_nombre_completo}`}
-          position={indexSeleccionado} 
+          position={indexSeleccionado}
           onClose={() => setShowModal(false)}
           onSave={handleSaveFirma}
           onDelete={handleDeleteFirma}
