@@ -1,6 +1,13 @@
 import axios from 'axios';
 import config from '../config';
 
+
+/**
+ * 
+ * @returns {Promise<Array>} Retorna un array con las bodegas
+ *
+ */
+
 const obtenerBodegas = async () => {
   try {
     const respuesta = await axios.get(`${config.BASE_URL}bodega/get`);

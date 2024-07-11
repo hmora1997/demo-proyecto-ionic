@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IonActionSheet, IonAlert } from '@ionic/react';
-import { trash,pencil,close } from 'ionicons/icons';
+import { trash, pencil, close } from 'ionicons/icons';
 
 const InsumosSeleccionados = ({ seleccionados, onEliminar, onEditar }) => {
     const [showActionSheet, setShowActionSheet] = useState(false);
@@ -10,7 +10,7 @@ const InsumosSeleccionados = ({ seleccionados, onEliminar, onEditar }) => {
 
     return (
         <div className="container-fluid px-0 mt-1">
-            <table className="table table-sm table-bordered table-custom text-center">
+            <table className="table table-sm table-bordered table-custom text-center align-middle">
                 <thead>
                     <tr>
                         <th scope="col" className="th-custom">Código</th>
@@ -21,7 +21,7 @@ const InsumosSeleccionados = ({ seleccionados, onEliminar, onEditar }) => {
                 <tbody>
                     {seleccionados.length > 0 ? (
                         seleccionados.map((insumo) => (
-                            <tr 
+                            <tr
                                 key={insumo.epp_id}
                                 onClick={() => {
                                     setInsumoSeleccionado(insumo);

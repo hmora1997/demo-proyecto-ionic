@@ -31,7 +31,7 @@ const MenuPrincipal = () => {
   };
 
   const handleButtonClick = (path) => {
-    if (path === "/home") {
+    if (path === "/home" || path === "/capacitacion") {
       navigateTo(path);
     } else {
       setToastMessage("Esta funcionalidad está en proceso.");

@@ -22,12 +22,15 @@ import "@ionic/react/css/display.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./theme/variables.css";
 
+
 setupIonicReact();
 
-const HomePage = lazy(() => import("./pages/HomePage"));
 const Login = lazy(() => import("./components/Login/Login.jsx"));
 const MenuPrincipalPage = lazy(() => import("./pages/MenuPrincipalPage"));
+const HomePageEpp = lazy(() => import("./pages/HomePageEpp"));
 const InsumosPage = lazy(() => import("./pages/InsumosPage"));
+const HomePageCapacitaciones = lazy(() => import("./pages/HomePageCapacitaciones"));
+const CapacitacionesPage = lazy(() => import("./pages/CapacitacionesPage"));
 const ConsultaPage = lazy(() => import("./pages/ConsultaPage"));
 
 const App: React.FC = () => {
@@ -66,10 +69,12 @@ const App: React.FC = () => {
               <Route exact path="/">
                 <Redirect to="/login" />
               </Route>
-              <ProtectedRoute exact path="/home" component={HomePage} />
+              <ProtectedRoute exact path="/home" component={HomePageEpp} />
               <ProtectedRoute exact path="/menu" component={MenuPrincipalPage} />
+              <ProtectedRoute exact path="/capacitacion" component={HomePageCapacitaciones} />
               <ProtectedRoute exact path="/consulta/:tipo" component={ConsultaPage} />
               <ProtectedRoute exact path="/entrega-epp-insumos" component={InsumosPage} />
+              <ProtectedRoute exact path="/entrega-capacitacion" component={CapacitacionesPage} />
             </Suspense>
           </IonRouterOutlet>
         </IonReactRouter>

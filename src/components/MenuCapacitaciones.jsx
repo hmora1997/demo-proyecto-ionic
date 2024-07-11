@@ -10,7 +10,7 @@ import BotonNavegacion from "./BotonNavegacion";
 import UsuarioActual from "./UsuarioActual";
 import "./menu-home.css";
 
-const MenuHome = () => {
+const MenuCapacitaciones = () => {
   const history = useHistory();
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -69,16 +69,16 @@ const MenuHome = () => {
     <IonContent className="page-color">
       <UsuarioActual />
       <div className="container-fluid px-4 mt-4">
-        <h2 className="mb-3">Entregar EPP o Insumos</h2>
+        <h2 className="mb-3">Entregar Capacitación</h2>
         <BotonNavegacion
-          texto="Entregar EPPs o Insumos"
-          ruta="/entrega-epp-insumos"
+          texto="Entregar Capacitación"
+          ruta="/entrega-capacitacion"
         />
-        <BotonNavegacion
+        {/* <BotonNavegacion
           texto="Consulta en Línea"
           onClick={() => setShowActionSheet(true)}
           expand="block"
-        />
+        /> */}
         <IonActionSheet
           isOpen={showActionSheet}
           onDidDismiss={() => setShowActionSheet(false)}
@@ -97,4 +97,4 @@ const MenuHome = () => {
   );
 };
 
-export default MenuHome;
+export default MenuCapacitaciones;

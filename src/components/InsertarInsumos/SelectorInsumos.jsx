@@ -32,6 +32,7 @@ const SelectorInsumos = ({
       setIsLoading(true);
       try {
         const insumosObtenidos = await obtenerInsumosPorCarId(cargoSeleccionado);
+        console.log("OBTENIDOS ", insumosObtenidos)
         const insumosFiltrados = insumosObtenidos.filter(
           (insumo) => insumo.car_id === cargoSeleccionado
         );
@@ -158,9 +159,12 @@ const SelectorInsumos = ({
                   />
                   <div className="ms-3 w-100 d-flex justify-content-between align-items-center">
                     <div className="flex-grow-1">
-                      <strong>
-                        {insumo.epp_nombre} - {insumo.epp_descripcion}
-                      </strong>
+                      <div>
+                        <span className="fw-bold">{insumo.epp_nombre} -</span>
+                      </div>
+                      <div>
+                        Talla: <span className="fw-bold">{insumo.epp_talla}</span>
+                      </div>
                     </div>
                     {seleccionados[insumo.epp_id] && (
                       <div className="d-flex align-items-center">

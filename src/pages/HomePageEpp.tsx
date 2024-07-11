@@ -1,18 +1,18 @@
 import React from 'react';
 import { IonContent, IonPage } from "@ionic/react";
 import "./Home.css";
-import MenuHome from "../components/MenuHome";
+import MenuEpp from "../components/MenuEpp";
 import Header from "../components/Header"
 
-const HomePage: React.FC = () => {
+const HomePageEpp: React.FC = () => {
   return (
     <IonPage>
     <Header showBackButton={true} />
     <IonContent fullscreen>
-      <MenuHome />
+      <MenuEpp />
     </IonContent>
   </IonPage>
   );
 };
 
-export default HomePage;
+export default HomePageEpp;

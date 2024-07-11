@@ -3,7 +3,7 @@ import { IonActionSheet, IonIcon } from "@ionic/react";
 import { trash, close, pencil } from "ionicons/icons";
 import Firma from "../Firma";
 
-const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados, firmas, setFirmas }) => {
+const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, firmas, setFirmas }) => {
   const [showActionSheet, setShowActionSheet] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [trabajadorSeleccionado, setTrabajadorSeleccionado] = useState(null);
@@ -42,7 +42,7 @@ const TrabajadoresSeleccionados = ({ seleccionados, onEliminar, setSeleccionados
 
   return (
     <div className="container-fluid px-0 mt-1">
-      <table className="table table-sm table-bordered table-custom text-center">
+      <table className="table table-sm table-bordered table-custom text-center align-middle">
         <thead>
           <tr>
             <th scope="col" className="th-custom">

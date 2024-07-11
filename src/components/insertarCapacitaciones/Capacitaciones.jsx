@@ -10,52 +10,37 @@ import {
   IonSelectOption,
   IonModal
 } from "@ionic/react";
-
-import { obtenerBodegas } from "../../services/bodegas";
+import { useAuth } from "../../AuthContext";
 import { getDeviceInfo } from "../../utils/androidId";
 import { getCurrentLocation } from "../../utils/geolocalizacion";
-import { enviarSolicitudes } from "../../services/insert";
-import { useAuth } from "../../AuthContext";
+import { enviarCapacitaciones } from "../../services/insert";
 
+import SelectorCargos from "./SelectorCargos";
 import SelectorTrabajadores from "../shared/SelectorTrabajadores";
 import TrabajadoresSeleccionados from "../shared/TrabajadoresSeleccionados";
-import SelectorInsumos from "./SelectorInsumos";
-import InsumosSeleccionados from "./InsumosSeleccionados";
-import SelectorCargos from "./SelectorCargos";
+import SelectorCapacitaciones from "./SelectorCapacitaciones";
+import CapacitacionesSeleccionadas from "./CapacitacionesSeleccionadas";
 import Firma from "../Firma";
 
 import CustomModal from "../CustomModal";
 import UsuarioActual from "../UsuarioActual";
-import "./epp-insumos.css";
+import "../InsertarInsumos/epp-insumos.css";
 
-const EppInsumos = () => {
-  const [bodegas, setBodegas] = useState([]);
+
+const Capacitaciones = () => {
   const [cargoSeleccionado, setCargoSeleccionado] = useState(null);
   const [seleccionados, setSeleccionados] = useState([]);
-  const [insumosSeleccionados, setInsumosSeleccionados] = useState([]);
+  const [capacitacionesSeleccionadas, setCapacitacionesSeleccionadas] = useState([]);
   const [firmas, setFirmas] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [modalStage, setModalStage] = useState(0);
   const [motivo, setMotivo] = useState("");
-  const [bodegaSeleccionada, setBodegaSeleccionada] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [showSupervisorModal, setShowSupervisorModal] = useState(false);
   const [firmaSupervisor, setFirmaSupervisor] = useState("");
   const [mostrarModalCargos, setMostrarModalCargos] = useState(false);
   const { userData } = useAuth();
 
-  useEffect(() => {
-    const cargarBodegas = async () => {
-      try {
-        const bodegasObtenidas = await obtenerBodegas();
-        setBodegas(bodegasObtenidas);
-      } catch (error) {
-        console.error("No se pudieron cargar las bodegas:", error);
-      }
-    };
-
-    cargarBodegas();
-  }, []);
 
   const onEliminar = (trabajadorId) => {
     const nuevasFirmas = { ...firmas };
@@ -69,21 +54,21 @@ const EppInsumos = () => {
     setFirmas(nuevasFirmas);
   };
 
-  const onEliminarInsumo = (insumoId) => {
-    const nuevosInsumosSeleccionados = insumosSeleccionados.filter(
-      (insumo) => insumo.epp_id !== insumoId
+  const onEliminarInsumo = (capacitacionId) => {
+    const nuevasCapacitacionesSeleccionadas = capacitacionesSeleccionadas.filter(
+      (capacitacion) => capacitacion.cap_id !== capacitacionId
     );
-    setInsumosSeleccionados(nuevosInsumosSeleccionados);
+    setCapacitacionesSeleccionadas(nuevasCapacitacionesSeleccionadas);
   };
 
-  const onEditar = (insumoId, nuevaCantidad) => {
-    const nuevosInsumosSeleccionados = insumosSeleccionados.map((insumo) =>
-      insumo.epp_id === insumoId
-        ? { ...insumo, cantidad: nuevaCantidad }
-        : insumo
+  const onEditar = (capacitacionId, nuevaCantidad) => {
+    const nuevasCapacitacionesSeleccionadas = capacitacionesSeleccionadas.map((capacitacion) =>
+      capacitacion.cap_id === capacitacionId
+        ? { ...capacitacion, cantidad: nuevaCantidad }
+        : capacitacion
     );
 
-    setInsumosSeleccionados(nuevosInsumosSeleccionados);
+    setCapacitacionesSeleccionadas(nuevasCapacitacionesSeleccionadas);
   };
 
   const closeModal = () => {
@@ -91,9 +76,8 @@ const EppInsumos = () => {
 
     if (modalStage === 2) {
       setSeleccionados([]);
-      setInsumosSeleccionados([]);
+      setCapacitacionesSeleccionadas([]);
       setFirmas({});
-      setBodegaSeleccionada("");
       setCargoSeleccionado(null);
       setMotivo("");
       setFirmaSupervisor("");
@@ -129,11 +113,10 @@ const EppInsumos = () => {
     console.log('Firma del supervisor antes de enviar:', firmaSupervisor);
 
     try {
-      await enviarSolicitudes(
+      await enviarCapacitaciones(
         seleccionados,
-        insumosSeleccionados,
+        capacitacionesSeleccionadas,
         motivo,
-        bodegaSeleccionada,
         userData.usu_id,
         uuid,
         location,
@@ -164,7 +147,7 @@ const EppInsumos = () => {
   };
 
   const handleSaveSupervisorFirma = (firma) => {
-    setFirmaSupervisor(firma); // Guardar la firma del supervisor en el estado
+    setFirmaSupervisor(firma);
     setShowSupervisorModal(false);
     setShowModal(true);
     setModalStage(0);
@@ -173,9 +156,8 @@ const EppInsumos = () => {
   const handleCargoSeleccionado = (cargo) => {
     setCargoSeleccionado(cargo);
     setSeleccionados([]);
-    setInsumosSeleccionados([]);
+    setCapacitacionesSeleccionadas([]);
     setFirmas({});
-    setBodegaSeleccionada("");
     setMotivo("");
     setMostrarModalCargos(false);
   };
@@ -185,7 +167,7 @@ const EppInsumos = () => {
     case 0:
       title = "¿Está Seguro?";
       message =
-        "¿Realmente desea proceder con las entregas de EPP o Insumos especificadas?";
+        "¿Realmente desea proceder con las entregas de Capacitaciones especificadas?";
       buttons = [
         { text: "No", handler: closeModal, colorClass: "button-gris-modal" },
         { text: "Si", handler: handleAccept, colorClass: "button-blue-modal" },
@@ -235,7 +217,7 @@ const EppInsumos = () => {
       <IonContent className="page-color">
         <UsuarioActual />
         <div className="container-fluid px-4 mt-4">
-          <h2 className="mb-3">Entregar EPP o Insumos</h2>
+          <h2 className="mb-3">Entregar Capacitación</h2>
           <IonLabel className="text-dark" position="stacked">
             <strong>Paso 1: Selecciona cargo</strong>
           </IonLabel>
@@ -274,29 +256,29 @@ const EppInsumos = () => {
           {
             cargoSeleccionado && seleccionados.length > 0 && todasFirmasPresentes() && (
               <>
-                <strong>Paso 3: Agregar Insumos</strong>
+                <strong>Paso 3: Agregar Capacitaciones</strong>
                 <div className="container-fluid px-0">
-                  <SelectorInsumos
+                  <SelectorCapacitaciones
                     cargoSeleccionado={cargoSeleccionado.car_id}
-                    insumosSeleccionados={insumosSeleccionados}
-                    setInsumosSeleccionados={setInsumosSeleccionados}
+                    capacitacionesSeleccionadas={capacitacionesSeleccionadas}
+                    setCapacitacionesSeleccionadas={setCapacitacionesSeleccionadas}
                   />
                 </div>
                 <IonLabel className="text-dark" position="stacked">
-                  Resumen Insumos
+                  Resumen Capacitaciones
                   <p className="fw-bold text-dark">
-                    Presione un insumo para eliminar
+                    Presione una capacitación para eliminar
                   </p>
                 </IonLabel>
-                <InsumosSeleccionados
-                  seleccionados={insumosSeleccionados}
+                <CapacitacionesSeleccionadas
+                  seleccionados={capacitacionesSeleccionadas}
                   onEliminar={onEliminarInsumo}
                   onEditar={onEditar}
                 />
               </>
             )
           }
-          {insumosSeleccionados.length > 0 && (
+          {capacitacionesSeleccionadas.length > 0 && (
             <>
               <IonLabel className="text-dark" position="stacked">
                 Paso 4: Motivo de entrega
@@ -307,40 +289,20 @@ const EppInsumos = () => {
                   onIonChange={(e) => setMotivo(e.detail.value)}
                   placeholder="Seleccione el motivo"
                 >
-                  <IonSelectOption value="PRIMERA ENTREGA">
-                    PRIMERA ENTREGA
+                  <IonSelectOption value="CAPACITACIÓN FORMAL">
+                    CAPACITACIÓN FORMAL
                   </IonSelectOption>
-                  <IonSelectOption value="EXTRAVÍO">EXTRAVÍO</IonSelectOption>
-                  <IonSelectOption value="AVERÍA">AVERÍA</IonSelectOption>
-                  <IonSelectOption value="VENCIMIENTO">
-                    VENCIMIENTO
+                  <IonSelectOption value="CAPACITACIÓN">CAPACITACIÓN INFORMAL</IonSelectOption>
+                  <IonSelectOption value="REFORZAMIENTO">REFORZAMIENTO</IonSelectOption>
+                  <IonSelectOption value="OTROS">
+                    OTROS
                   </IonSelectOption>
-                  <IonSelectOption value="OTROS MOTIVOS">
-                    OTROS MOTIVOS
-                  </IonSelectOption>
-                </IonSelect>
-              </IonItem>
-              <IonLabel className="text-dark" position="stacked">
-                Paso 5: Bodega
-              </IonLabel>
-              <IonItem className="input-item mb-4">
-                <IonSelect
-                  value={bodegaSeleccionada}
-                  onIonChange={(e) => setBodegaSeleccionada(e.detail.value)}
-                  placeholder="Selecciona Bodega"
-                >
-                  {bodegas.map((bodega) => (
-                    <IonSelectOption key={bodega.bod_id} value={bodega.bod_id}>
-                      {bodega.bod_nombre}
-                    </IonSelectOption>
-                  ))}
                 </IonSelect>
               </IonItem>
             </>
           )}
           {seleccionados.length > 0 &&
-            insumosSeleccionados.length > 0 &&
-            bodegaSeleccionada.length > 0 &&
+            capacitacionesSeleccionadas.length > 0 &&
             motivo.trim() !== "" && (
               <IonButton
                 expand="block"
@@ -381,4 +343,4 @@ const EppInsumos = () => {
   );
 };
 
-export default EppInsumos;
+export default Capacitaciones;

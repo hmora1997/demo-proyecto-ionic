@@ -8,7 +8,7 @@ import {
   IonSearchbar,
 } from '@ionic/react';
 import { close } from 'ionicons/icons';
-import { obtenerCargos } from '../../services/cargos';
+import { obtenerCargosCapacitaciones } from '../../services/cargos';
 
 const SelectorCargos = ({ seleccionados, setSeleccionados, onClose }) => {
   const [cargos, setCargos] = useState([]);
@@ -18,7 +18,7 @@ const SelectorCargos = ({ seleccionados, setSeleccionados, onClose }) => {
   useEffect(() => {
     const cargarCargos = async () => {
       try {
-        const cargosObtenidos = await obtenerCargos();
+        const cargosObtenidos = await obtenerCargosCapacitaciones();
         setCargos(cargosObtenidos);
       } catch (error) {
         console.error("No se pudieron cargar los cargos:", error);
