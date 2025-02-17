@@ -340,7 +340,7 @@ const EppInsumos = () => {
           )}
           {seleccionados.length > 0 &&
             insumosSeleccionados.length > 0 &&
-            bodegaSeleccionada.length > 0 &&
+            bodegaSeleccionada &&
             motivo.trim() !== "" && (
               <IonButton
                 expand="block"
